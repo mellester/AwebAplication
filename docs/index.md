@@ -80,6 +80,8 @@ processors=4 # Makes the WSL 2 VM use two virtual processors
 ## Install laravel jetsream
 
 ```Bash
+sudo apt update
+sudo apt -y install composer phpunit npm
 cd ~
 #create a new laravel project
 composer create-project laravel/laravel AwebAplication 
