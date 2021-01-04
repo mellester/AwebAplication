@@ -91,10 +91,70 @@ composer require laravel/jetstream
 composer require laravel/sail --dev
 #Make A allias to sail
 echo "alias sail=./vendor/bin/sail" >> ~/.bash_aliases 
-source ~/.bash_aliases #load said allias  
+source ~/.bash_aliases #load the allias into this sesion 
+
+#setup jestream to use inetria
 php artisan jetstream:install inertia
-sudo apt install -y npm
 npm install && npm run dev
+
+#finally lanch your docker containetrs 
+sail up -d
+#launch 
+sail artisan migrate 
+```
+This should 
+
+## Errors I had to fix
+### Conection error  to mysql
+A conection error. when running migrate 
+To fix it I changed the following value in `.env`
+``` 
+DB_HOST=mysql
+```
+This made `sail artisan migrate ` run smootly 
+
+### A init error 
+The below is a weird error you can get for no reason
+```
+<3>init: (435) ERROR: UtilConnectToInteropServer:300: connect failed 2
+```
+To fix add the followin to you ~./bashrc
+```bash
+#https://github.com/microsoft/WSL/issues/5065
+fix_wsl2_interop() {
+    for i in $(pstree -np -s $$ | grep -o -E '[0-9]+'); do
+        if [[ -e "/run/WSL/${i}_interop" ]]; then
+            export WSL_INTEROP=/run/WSL/${i}_interop
+        fi
+    done
+}
+fix_wsl2_interop
 ```
 ##  Setup ngrock ## 
 
+ngrock is a usefull service to setup.
+To get it to run add the folowin to your `docker-compose.yml`
+```yml
+services:
+    ngrok:
+        image: wernight/ngrok:latest
+        ports:
+        - 4040:4040
+        environment:
+            NGROK_PROTOCOL: http
+            NGROK_PORT: 80
+        networks: 
+            - sail
+        depends_on:
+            - laravel.test        
+```
+This will launch a service to tunnel your trafic
+To get the link to your webiste got to the portal on `localhost:4040` or 
+run the follwing to grep the link from the commanline
+```Bash
+curl --silent  localhost:4040/api/tunnels | grep -Po 'public_url..\K.*?(?=,)' 
+```
+If you need only the second one
+```
+curl --silent  localhost:4040/api/tunnels | grep -Po 'public_url..\K.*?(?=,)' | sed -n 2p
+```
