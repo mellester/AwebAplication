@@ -7,7 +7,8 @@
             {{ $inertia.page.props.appName}}
             </a>
             <div class="flex justify-self-right">
-            <a href="/login" class="flex-auto p-4 justify-self-right tw-text-white">Sign in</a>
+            <a :href="route('register')" class="btn flex-auto p-4 justify-self-right tw-text-white">Register</a>
+            <a :href="route('login')" class="btn flex-auto p-4 justify-self-right tw-text-white">Sign in</a>
             </div>
         </div>
     </nav>

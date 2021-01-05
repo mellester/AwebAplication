@@ -25,6 +25,8 @@ class Homepage extends Page
     public function assert(Browser $browser)
     {
         $browser->assertPathIs($this->url());
+        $browser->assertSee('Register');
+        $browser->assertSee('Sign in');
     }
 
     /**
