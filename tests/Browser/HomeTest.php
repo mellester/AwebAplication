@@ -5,24 +5,20 @@ namespace Tests\Browser;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Laravel\Dusk\Browser;
 use Tests\DuskTestCase;
+use Tests\Browser\Pages\Homepage;
 
-class ExampleTest extends DuskTestCase
+class HomeTest extends DuskTestCase
 {
     /**
-     * A basic browser test example.
-     * @test
-     * 
+     * A Dusk test example.
+     *
      * @return void
      */
-    public function loadBasic()
+    public function testExample()
     {
         $this->browse(function (Browser $browser) {
-            $browser->visit('/')
+            $browser->visit(new Homepage)
                     ->assertSee('Laravel');
         });
     }
-    /**
-     * @test
-     */
-
 }
