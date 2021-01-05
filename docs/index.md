@@ -72,7 +72,7 @@ This opens up a config file or creates one in you user folder.
 In this folder add the following.
 ```
 [wsl2]
-memory=4GB   # Limits VM memory in WSL 2 up to 3GB
+memory=3GB   # Limits VM memory in WSL 2 up to 3GB
 processors=4 # Makes the WSL 2 VM use two virtual processors
 ```
 

@@ -18,7 +18,7 @@ class HomeTest extends DuskTestCase
     {
         $this->browse(function (Browser $browser) {
             $browser->visit(new Homepage)
-                    ->assertSee('Laravel');
+                    ->assertSee(config('app.name', 'Laravel'));
         });
     }
 }

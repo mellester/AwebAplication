@@ -1,4 +1,6 @@
 
+
+
 <?php 
 $faker = Faker\Factory::create();
 use App\Models\User;
