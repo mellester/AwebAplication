@@ -4,6 +4,7 @@ namespace Tests\Browser;
 
 use App\Models\User;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Laravel\Dusk\Browser;
 use Faker\Generator as Faker;
 use Tests\Browser\Pages\Homepage;
@@ -17,7 +18,7 @@ use Database\Factories\UserFactory;
 
 class LoginTest extends DuskTestCase
 {
-    use DatabaseMigrations;
+    use RefreshDatabase;
     private static function inputByLabelText($label)
     {
         return WebDriverBy::xpath("//input[@id=(//Label[contains(text(),'$label')]/@for)]");
@@ -37,7 +38,12 @@ class LoginTest extends DuskTestCase
         $faker = new UserFactory();
         $data = $faker->definition();
         $this->browse(function (Browser $browser) use($data) {
+            $browser->logout();
             $browser->visit(new Homepage)
+            ->pause(1000)
+            ->assertPresent('#menuBttn')
+            ->click('#menuBttn')
+            ->waitForText('Register', 1)
             ->clickLink('Register')
             ->assertRouteIs('register')
             ->type(
@@ -67,6 +73,7 @@ class LoginTest extends DuskTestCase
     {
         $this->browse(function (Browser $browser) {
             $browser->visit(new Homepage)
+            ->click('#menuBttn')
                 ->clickLink('Sign in');
             $Email = self::idOfLabel($browser, 'Email');
             $browser->type($Email, self::$userEmail);
@@ -85,6 +92,9 @@ class LoginTest extends DuskTestCase
         $user = User::where('email',  self::$userEmail)->first();
         $this->browse(function (Browser $browser) use($user) {
         $browser->visit(new Homepage)
+            ->pause(1000)
+            ->click('#menuBttn')
+            ->waitForText('Sign in', 1)
             ->clickLink('Sign in')
             ->type(
                 self::idOfLabel($browser, 'Email'),
@@ -96,6 +106,7 @@ class LoginTest extends DuskTestCase
             $browser->press("LOGIN")
             ->assertRouteIs('dashboard')
             ->assertSee($user->name)
+            ->screenshot('Login')
             ->assertAuthenticatedAs($user);
 
         });

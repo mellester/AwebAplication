@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
+    Inertia\Inertia::setRootView('app');
     return Inertia\Inertia::render('Index');
 });
 
