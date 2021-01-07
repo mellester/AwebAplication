@@ -43,8 +43,15 @@ class LoginTest extends DuskTestCase
             ->type(
                 self::idOfLabel($browser, 'Email'),
                 $data['email']
+            )->type(         
+                self::idOfLabel($browser, 'Name'),
+                $data['name']
             )->type(
                 self::idOfLabel($browser, 'Password'),
+                'password'
+            )
+            ->type(
+                self::idOfLabel($browser, 'Confirm Password'),
                 'password'
             );
             $browser->screenshot('login1');
