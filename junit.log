@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites>
+  <testsuite name="" tests="2" assertions="0" errors="2" warnings="0" failures="0" skipped="0" time="0.970353">
+    <testsuite name="Browser Test Suite" tests="2" assertions="0" errors="2" warnings="0" failures="0" skipped="0" time="0.970353">
+      <testsuite name="Tests\Browser\ExampleTest" file="/var/www/html/tests/Browser/ExampleTest.php" tests="1" assertions="0" errors="1" warnings="0" failures="0" skipped="0" time="0.552573">
+        <testcase name="try_to_register" class="Tests\Browser\ExampleTest" classname="Tests.Browser.ExampleTest" file="/var/www/html/tests/Browser/ExampleTest.php" line="29" assertions="0" time="0.552573">
+          <error type="Facebook\WebDriver\Exception\UnknownErrorException">Tests\Browser\ExampleTest::try_to_register
+Facebook\WebDriver\Exception\UnknownErrorException: unknown error: net::ERR_CONNECTION_REFUSED
+  (Session info: headless chrome=87.0.4280.66)
+
+/var/www/html/vendor/php-webdriver/webdriver/lib/Exception/WebDriverException.php:139
+/var/www/html/vendor/php-webdriver/webdriver/lib/Remote/HttpCommandExecutor.php:371
+/var/www/html/vendor/php-webdriver/webdriver/lib/Remote/RemoteWebDriver.php:612
+/var/www/html/vendor/php-webdriver/webdriver/lib/Remote/RemoteExecuteMethod.php:27
+/var/www/html/vendor/php-webdriver/webdriver/lib/WebDriverNavigation.php:41
+/var/www/html/vendor/laravel/dusk/src/Browser.php:153
+/var/www/html/tests/Browser/ExampleTest.php:33
+/var/www/html/vendor/laravel/dusk/src/Concerns/ProvidesBrowser.php:68
+/var/www/html/tests/Browser/ExampleTest.php:35</error>
+        </testcase>
+      </testsuite>
+      <testsuite name="Tests\Browser\LoginTest" file="/var/www/html/tests/Browser/LoginTest.php" tests="1" assertions="0" errors="1" warnings="0" failures="0" skipped="0" time="0.417780">
+        <testcase name="testExample" class="Tests\Browser\LoginTest" classname="Tests.Browser.LoginTest" file="/var/www/html/tests/Browser/LoginTest.php" line="17" assertions="0" time="0.417780">
+          <error type="Facebook\WebDriver\Exception\UnknownErrorException">Tests\Browser\LoginTest::testExample
+Facebook\WebDriver\Exception\UnknownErrorException: unknown error: net::ERR_CONNECTION_REFUSED
+  (Session info: headless chrome=87.0.4280.66)
+
+/var/www/html/vendor/php-webdriver/webdriver/lib/Exception/WebDriverException.php:139
+/var/www/html/vendor/php-webdriver/webdriver/lib/Remote/HttpCommandExecutor.php:371
+/var/www/html/vendor/php-webdriver/webdriver/lib/Remote/RemoteWebDriver.php:612
+/var/www/html/vendor/php-webdriver/webdriver/lib/Remote/RemoteExecuteMethod.php:27
+/var/www/html/vendor/php-webdriver/webdriver/lib/WebDriverNavigation.php:41
+/var/www/html/vendor/laravel/dusk/src/Browser.php:153
+/var/www/html/tests/Browser/LoginTest.php:20
+/var/www/html/vendor/laravel/dusk/src/Concerns/ProvidesBrowser.php:68
+/var/www/html/tests/Browser/LoginTest.php:23</error>
+        </testcase>
+      </testsuite>
+    </testsuite>
+  </testsuite>
+</testsuites>
