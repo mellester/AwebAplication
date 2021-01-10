@@ -14,11 +14,12 @@ class CacheMiddleware
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  \Closure  $next
+     * @param   $time
      * @return mixed
      */
-    public function handle(Request $request, Closure $next,int $time)
+    public function handle(Request $request, Closure $next, $time)
     {
-        $key = 'request|'.$request->url().'|'.$request->user->id;
+        $key = 'request|'.$request->url().'|'. \Auth::user()->id;
         //dump('start CacheMiddleware with key' . $key);
         if ( strtolower($request->input('no-cache')) != 'false')
             return $next($request);

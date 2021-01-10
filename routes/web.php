@@ -25,7 +25,7 @@ Route::get('/', function () {
 Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function  (Request $request) {
     dump($request);
     $request->user = Auth::user();
-    $productinfo = (new DashboardProduct(Auth::user()))->toArray($request);
+    $productinfo = Route::dispatch(Request::create('/api/v1/DashboardProduct'));
     return Inertia\Inertia::render('Dashboard', compact('productinfo')
     );
 })->name('dashboard');

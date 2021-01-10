@@ -42,11 +42,8 @@ class DashboardProduct extends JsonResource
      */
     public function toArray($request)
     {
-        $mid = new CacheMiddleware();
         $id = $this->id;
         $viewName = self::viewName;
-        return $mid->handle($request, function () use ($id, $viewName){
-            return (DB::table($viewName)->where('id', $id)->first());
-        } , 300);
+        return (DB::table($viewName)->where('id', $id)->first());
     }
 }
