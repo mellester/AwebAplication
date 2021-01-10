@@ -25,5 +25,8 @@
             AppLayout,
             Welcome,
         },
+        props: {
+            productinfo: Object,
+        }
     }
 </script>

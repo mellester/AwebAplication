@@ -18,3 +18,12 @@ mix.js('resources/js/app.js', 'public/js')
     ])
     .webpackConfig(require('./webpack.config'));
 mix.sourceMaps(true);
+mix.browserSync({
+    proxy: 'http://localhost:80',
+    port: 3000,
+    ui : {
+        port: 8080,
+    },
+    open: false, // do not open a browser winwdow
+    files: ["public/js/*"],
+});

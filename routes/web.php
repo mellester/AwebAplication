@@ -1,6 +1,10 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Resources\DashboardProduct;
+use App\Models\User;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\Request;
 
 /*
 |--------------------------------------------------------------------------
@@ -18,11 +22,19 @@ Route::get('/', function () {
     return Inertia\Inertia::render('Index');
 });
 
-Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
-    return Inertia\Inertia::render('Dashboard');
+Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function  (Request $request) {
+    dump($request);
+    $request->user = Auth::user();
+    $productinfo = (new DashboardProduct(Auth::user()))->toArray($request);
+    return Inertia\Inertia::render('Dashboard', compact('productinfo')
+    );
 })->name('dashboard');
 
 
-Route::get('/test', function () {
+Route::get('/test', function (Request $request) {
+    $user = auth()->user() ?? User::find(1);
+    $request->user = $user;
+    dd((new DashboardProduct(Auth::user() ?? User::find(1)))->toArray($request));
+
     return view('test');
 });
