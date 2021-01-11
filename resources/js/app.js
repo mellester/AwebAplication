@@ -17,7 +17,7 @@ const req = require.context('./components/', false, /\.(vue)$/i)
 for (const key of req.keys()) {
   const name = key.match(/\w+/)[0];//![0]
   Vue.component(name, req(key).default);
-}
+} 
 
 const app = document.getElementById('app');
 
