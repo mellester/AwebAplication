@@ -18,22 +18,22 @@ class ProductController extends Controller
      */
     public function index()
     {
-        $products = Product::where('status', '!=', 'notPublished')->orderBy('created_at')->paginate(50);
+        $productlist = Product::where('status', '!=', 'notPublished')->orderBy('created_at')->paginate(50);
         return Inertia::render(
             'products/index',
-            compact('products')
+            compact('productlist')
         );
     }
 
     /** 
      * Display a list of resources you own
       */
-    public function indexYours(Type $var = null)
+    public function indexYours()
     {
-        $products = Product::where('user_id', '==', Auth::user())->orderBy('created_at')->paginate(50);
+        $productlist = Product::where('user_id', Auth::user()->id)->orderBy('created_at')->paginate(50);
         return Inertia::render(
             'products/indexYours',
-            compact('products')
+            compact('productlist')
         );
     }
 

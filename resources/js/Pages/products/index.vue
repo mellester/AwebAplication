@@ -1,6 +1,6 @@
 <template>
   <ProductLayout>
-
+    <product-list :productlist="productlist"/>
   </ProductLayout>
 </template>
 
@@ -15,7 +15,7 @@ export default {
     Welcome,
   },
   props: {
-    productinfo: Object,
+    productlist: Object,
   },
 };
 </script>
