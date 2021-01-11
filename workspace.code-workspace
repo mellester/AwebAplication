@@ -1,4 +1,7 @@
 {
+    "settings": {
+        "editor.formatOnSave": true
+    },
     "folders": [
         {
             "path": "."

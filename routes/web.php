@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ProductController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Resources\DashboardProduct;
 use App\Models\User;
@@ -22,14 +23,25 @@ Route::get('/', function () {
     return Inertia\Inertia::render('Index');
 });
 
-Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function  (Request $request) {
-    dump($request);
-    $request->user = Auth::user();
-    $productinfo = Route::dispatch(Request::create('/api/v1/DashboardProduct'));
-    return Inertia\Inertia::render('Dashboard', compact('productinfo')
-    );
-})->name('dashboard');
-
+Route::middleware(['auth:sanctum', 'verified'])->group(function () {
+    Route::get('/dashboard', function (Request $request) {
+        $request->user = Auth::user();
+        $productinfo = Route::dispatch(Request::create('/api/v1/DashboardProduct'))->getData()->data;
+        //dump($productinfo);
+        return Inertia\Inertia::render(
+            'Dashboard',
+            compact('productinfo')
+        );
+    })->name('dashboard');
+    Route::get('product/indexYours', [ProductController::class, 'indexYours'])
+    ->name('indexyours');
+    Route::resource('product', ProductController::class, ['except' => [
+        'index', 'show'
+    ]]);
+});
+Route::resource('product', ProductController::class, ['only' => [
+    'index', 'show'
+]]);
 
 Route::get('/test', function (Request $request) {
     $user = auth()->user() ?? User::find(1);

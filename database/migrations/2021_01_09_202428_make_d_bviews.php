@@ -16,7 +16,7 @@ class MakeDBviews extends Migration
      */
     public function up()
     {
-        $viewSQLQuery = DashboardProduct::viewSQLQuery;
+        $viewSQLQuery = DashboardProduct::$viewSQLQuery;
         $viewName = self::viewName;
         DB::statement("DROP VIEW IF EXISTS $viewName ");
         DB::statement("CREATE VIEW  $viewName  AS $viewSQLQuery");  

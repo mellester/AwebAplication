@@ -5,7 +5,8 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\Hash;
 use App\Models\User;
-use App\Enums\UserType;
+use App\Enums\productStatus;
+
 
 class CreateAdminUserAndRoles extends Migration
 {
@@ -39,6 +40,7 @@ class CreateAdminUserAndRoles extends Migration
             $table->text('description');
             $table->integer('price');
             $table->json('data');
+            $table->string('status', 30)->default(productStatus::notPublished);
             $table->bigInteger('user_id')->unsigned();
             // if (config('product.review')) {
             $table->date('reviewed_at')->nullable();
