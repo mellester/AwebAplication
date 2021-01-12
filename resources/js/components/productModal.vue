@@ -1,52 +1,100 @@
 <template>
-<div class="mgrid border min-h-8 grid gap-x-8 gap-y-4">
-    <div id="expandButton"> 
+  <tbody>
+    <tr class="">
+      <td id="expandButton">
         <button @click="isExpanded = !isExpanded">
-            {{!isExpanded ? "expand" : "unexpand" }}
-            </button>
-    </div>
-    <div id="name">
-        {{product.name}}
-    </div> 
-    <div :class="isExpanded ? '' : 'hidden'" class="mdes">
-        {{product.description}}
-    </div>
-</div>
+          {{ !isExpanded ? "expand" : "unexpand" }}
+        </button>
+      </td>
+      <td id="name">
+        {{ product.name }}
+      </td>
+      <td id="Cost">
+        {{ product.price }}
+      </td>
+      <td id="Weight">
+        {{ Data.weight }}
+      </td>
+      <td id="Source">
+        {{ Data.source }}
+      </td>
+      <td id="Owner">
+        <a class="text-sm text-blue-800"
+        :href="route().has('user.show') ? route('user.show', product.user_id): ' ' ">
+        {{ product.user_id == this.$inertia.page.props.user.id ? 
+        "You" : product.owner.name }}
+        </a>
+      </td>
+        <td id="Show">
+            <JetResponsiveNavLink :href="route('product.show', this.product.id)" class="mbtn">
+              Show
+            </JetResponsiveNavLink>
+      </td>
+    </tr>
+    <tr  :class="isExpanded ? '' : 'hidden'">
+      <td>
+        <form @submit.prevent="submit"  v-if="product.status == 'notPublished'"> 
+           <Button type="submit" class="mbtn">Publish</Button>
+        </form>
+           <Button class="mbtn" v-else>unPublish</Button>
+       </td>
+      <td colspan="6" class="mdes">
+        {{ product.description }}
+      </td>
+    </tr>
+  </tbody>
 </template>
 
 <script>
+import JetResponsiveNavLink from "@/Jetstream/ResponsiveNavLink";
+
+import * as Status from '/resources/js/enums/productStatus.js'
 export default {
-    data() {
-        return {
-            isExpanded : false,
-        }
+    components: {
+    JetResponsiveNavLink,
+  },
+  data() {
+    return {
+      isExpanded: false,
+      form: {
+          id: this.product.id,
+          status: this.product.status,
+      },
+    };
+  },
+  props: {
+    product: {
+      type: Object,
+      required: true,
     },
-    props : {
-        product : {
-            type : Object,
-            required : true,
-        }
+  },
+  computed: {
+    Data: function () {
+      return JSON.parse(this.product.data);
+    },
+  },
+    methods: {
+      submit() {
+       this.form.status = Status.Published;
+       this.$inertia.patch(route('product.update', this.product.id), this.form).then( () => {
+       this.isExpanded = false;
+         this.$inertia.reload({ only: ['products'] })
+       });
+    },
+  },
+    filters: {
+    pretty: function(value) {
+      return JSON.stringify(JSON.parse(value), null, 2);
     }
-}
+  }
+};
 </script>
 
 <style scoped>
-.mgrid {
-    display: grid;
-    grid-template-columns: 1fr 4fr 1fr ;
-    grid-template-rows: auto ;
-}
-.mdes {
-    grid-column: 1 / span 3;
-    grid-row: 2;
+.btn-default {
+  color: #333;
+  background-color: #fff;
+  border-color: #ccc;
 }
 
-.mgrid > div {
-    height: 100%;
-}
-.btn-default {
-    color: #333;
-    background-color: #fff;
-    border-color: #ccc;
-}
 </style>

@@ -9,7 +9,22 @@ use Carbon\Carbon;
 class Product extends Model
 {
     use HasFactory;
-    protected $table = 'products';
+	protected $table = 'products';
+	protected $fillable = [
+		'status'
+	];
+
+	protected $with = 'owner:id,name';
+
+	
+    /**
+     * The attributes that should be cast to native types.
+     *
+     * @var array
+     */
+    protected $casts = [
+        'created_at' => 'datetime',
+    ];
 
 	public function categories() {
 		return $this->belongsToMany($this->categoryModel,'category_product','product_id','category_id');
@@ -27,7 +42,7 @@ class Product extends Model
 		return $this->hasMany($this->wishlistModel,'product_id');
 	}
 	public function owner() {
-		return $this->belongsTo($this->userModel, 'user_id', 'id');
+		return $this->belongsTo(User::class, 'user_id', 'id');
 	}
 	public function shouldBeReviewed() {
 		return !!config('market.product.review');

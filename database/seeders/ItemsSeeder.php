@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Enums\productStatus;
 use App\Models\Product;
 use App\Models\User;
 use Carbon\Carbon;
@@ -40,14 +41,22 @@ class ItemsSeeder extends Seeder
             if (isset($data['entries']) && getType($data['entries'][0]) == getType("")) {
                 $description = implode('\n',$data['entries']);
             }
-            array_push ( $toInsert, array(
+            $tmp = array(
                 'user_id' => $user->id,
                 'name' => $name,
                 'data' => json_encode($data),
                 'price' => $price,
                 'description' => $description,
                 'created_at' => $time
-            ));
+            );
+            if ($key < 5) {
+                $tmp['status'] = productStatus::Published;
+            }
+            else {
+                $tmp['status'] = productStatus::notPublished;
+            }
+            array_push ( $toInsert, $tmp);
+
             $time = $time->addHour(-1);
             //echo  $key . ':' . print_r($itemData) . '\n';
         }

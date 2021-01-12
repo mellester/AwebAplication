@@ -8,6 +8,7 @@ use Inertia\Inertia;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Redirect;
 
 class ProductController extends Controller
 {
@@ -18,7 +19,7 @@ class ProductController extends Controller
      */
     public function index()
     {
-        $productlist = Product::where('status', '!=', 'notPublished')->orderBy('created_at')->paginate(50);
+        $productlist = Product::where('status', '!=', 'notPublished')->with('owner:id,name')->orderBy('created_at')->paginate(50);
         return Inertia::render(
             'products/index',
             compact('productlist')
@@ -27,7 +28,7 @@ class ProductController extends Controller
 
     /** 
      * Display a list of resources you own
-      */
+     */
     public function indexYours()
     {
         $productlist = Product::where('user_id', Auth::user()->id)->orderBy('created_at')->paginate(50);
@@ -61,12 +62,15 @@ class ProductController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param  Product  $product
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Request $request, Product $product)
     {
-        //
+        return Inertia::render(
+            'products/show',
+            compact('product')
+        );
     }
 
     /**
@@ -87,9 +91,16 @@ class ProductController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Product $product)
     {
-        //
+        $data = $request->validateWithBag(
+            'updateProduct',
+            [
+                'status' => 'required|string'
+            ],
+        );
+        $product->update($data);
+        return Redirect::back();
     }
 
     /**

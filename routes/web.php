@@ -34,7 +34,7 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
         );
     })->name('dashboard');
     Route::get('product/indexYours', [ProductController::class, 'indexYours'])
-    ->name('indexyours');
+    ->name('product.indexyours');
     Route::resource('product', ProductController::class, ['except' => [
         'index', 'show'
     ]]);

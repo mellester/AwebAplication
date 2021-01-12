@@ -11,13 +11,7 @@ const mix = require('laravel-mix');
  |
  */
 
-mix.js('resources/js/app.js', 'public/js')
-    .postCss('resources/css/app.css', 'public/css', [
-        require('postcss-import'),
-        require('tailwindcss'),
-    ])
-    .webpackConfig(require('./webpack.config'));
-mix.sourceMaps(true);
+
 mix.browserSync({
     proxy: 'http://localhost:80',
     port: 3000,
@@ -27,3 +21,10 @@ mix.browserSync({
     open: false, // do not open a browser winwdow
     files: ["public/js/*"],
 });
+mix.js('resources/js/app.js', 'public/js')
+    .postCss('resources/css/app.css', 'public/css', [
+        require('postcss-import'),
+        require('tailwindcss'),
+    ])
+    .webpackConfig(require('./webpack.config'));
+mix.sourceMaps(true);

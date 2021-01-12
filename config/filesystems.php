@@ -41,6 +41,10 @@ return [
             'url' => env('APP_URL').'/storage',
             'visibility' => 'public',
         ],
+        'enum-js' => [
+            'driver' => 'local',
+            'root' => resource_path() . '/js/enums',
+        ],
 
         's3' => [
             'driver' => 's3',

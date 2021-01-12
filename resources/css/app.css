@@ -6,3 +6,9 @@
 .product-list {
     display: grid;
 }
+
+.mbtn {
+    @apply rounded;
+    @apply bg-blue-900;
+    @apply text-white;
+}
