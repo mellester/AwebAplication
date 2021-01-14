@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Product;
+use Facade\Ignition\DumpRecorder\Dump;
 use Inertia\Inertia;
 
 
@@ -45,7 +46,7 @@ class ProductController extends Controller
      */
     public function create()
     {
-        //
+        
     }
 
     /**
@@ -79,9 +80,13 @@ class ProductController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Product $product)
     {
-        //
+        //dd($product);
+        return Inertia::render(
+            'products/edit',
+            compact('product')
+        );
     }
 
     /**
@@ -93,14 +98,23 @@ class ProductController extends Controller
      */
     public function update(Request $request, Product $product)
     {
+        //dd($product, Auth::user());
+        if ($product->user_id != Auth::user()->id) {
+            return Redirect::back()->withErrors(['default'=>'You do not own this resource']);
+        }
+        $fillable = [];
+        foreach ($product->getFillable() as $value) {
+            // Creare a rule set that all fillable properties somtimes may be added
+            $fillable[$value] = 'sometimes';
+        }
         $data = $request->validateWithBag(
             'updateProduct',
-            [
-                'status' => 'required|string'
-            ],
+            array_merge($fillable, [
+                'status' => 'required|string',
+            ]),
         );
         $product->update($data);
-        return Redirect::back();
+        return Redirect::route('product.show', $product);
     }
 
     /**

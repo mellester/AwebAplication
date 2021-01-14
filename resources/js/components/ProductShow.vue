@@ -2,15 +2,15 @@
 <template>
 <div class="bg-white shadow overflow-hidden sm:rounded-lg">
   <div class="px-4 py-5 sm:px-6">
+    <form v-if="route().has('product.edit')" >
+    <JetResponsiveNavLink class="m-float bg-blue-500 object-right" :href="route('product.edit', product.id)">Edit </JetResponsiveNavLink>
+    </form>
     <h3 class="text-lg leading-6 font-medium text-gray-900">
       Product Information
     </h3>
     <p class="mt-1 max-w-2xl text-sm text-gray-500">
       Full details.
     </p>
-    <form v-if="route().has('product.edit')" :action="route('product.edit', product.id)">
-    <Button class="m-float bg-color-red object-right" type="link">Edit </Button>
-    </form>
   </div>
   <div class="border-t border-gray-200">
     <dl>
@@ -100,13 +100,14 @@
 
 <script>
 import Button from '../Jetstream/Button.vue';
+import JetResponsiveNavLink from "@/Jetstream/ResponsiveNavLink";
 export default {
   data() {
     return {
       ExpandPanle: false,
     };
   },
-  components: { Button },
+  components: { Button , JetResponsiveNavLink},
   props: {
     product: {
       type: Object,
@@ -130,7 +131,7 @@ export default {
 <style>
 .m-float {
     float: right;
-    top: -3em;
+    margin-top: 1em;
   position: relative;
 }
 </style>

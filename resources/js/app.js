@@ -20,8 +20,11 @@ for (const key of req.keys()) {
 } 
 
 const app = document.getElementById('app');
+import * as ErrorBagInteracter from "./Mixins/InteractsWithErrorBags";
+Vue.mixin(ErrorBagInteracter);
 
 new Vue({
+    //mixins: [ErrorBagInteracter],
     render: (h) =>
         h(InertiaApp, {
             props: {

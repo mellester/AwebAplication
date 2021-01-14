@@ -11,7 +11,7 @@ class Product extends Model
     use HasFactory;
 	protected $table = 'products';
 	protected $fillable = [
-		'status'
+		'status', 'name', 'description', 'price', 'photo',
 	];
 
 	protected $with = 'owner:id,name';
