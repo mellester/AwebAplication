@@ -1,10 +1,10 @@
 <template>
   <app-layout>
     <template #header>
-      <div class="flex flex-row ">
+      <div class="flex flex-row">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
           <JetResponsiveNavLink
-            :href="route('product.index')"
+            :href="route('product.index', [], false)"
             :active="route().current('product.index')"
           >
             All Products
@@ -12,7 +12,7 @@
         </h2>
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
           <JetResponsiveNavLink
-            :href="route('product.indexyours')"
+            :href="route('product.indexyours', [], false)"
             :active="route().current('product.indexyours')"
           >
             Your Products
@@ -23,7 +23,7 @@
 
     <div class="py-1">
       <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-        <div >
+        <div>
           <slot />
         </div>
       </div>
@@ -41,8 +41,6 @@ export default {
     AppLayout,
     Welcome,
   },
-  props: {
-
-  },
+  props: {},
 };
 </script>

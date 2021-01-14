@@ -46,7 +46,13 @@ class ProductController extends Controller
      */
     public function create()
     {
-        
+        $product = Product::find(1);
+        unset($product->id);
+        $mode = "new";
+        return Inertia::render(
+            'products/edit',
+            compact('product', 'mode')
+        );
     }
 
     /**
@@ -98,9 +104,9 @@ class ProductController extends Controller
      */
     public function update(Request $request, Product $product)
     {
-        //dd($product, Auth::user());
+        dd($product, $request);
         if ($product->user_id != Auth::user()->id) {
-            return Redirect::back()->withErrors(['default'=>'You do not own this resource']);
+            return Redirect::back()->withErrors(['default' => 'You do not own this resource']);
         }
         $fillable = [];
         foreach ($product->getFillable() as $value) {

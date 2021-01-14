@@ -1,6 +1,6 @@
 <template>
   <ProductLayout>
-    <product-list :productlist="productlist"/>
+    <product-list :productlist="productlist" dusk="vue-product" />
   </ProductLayout>
 </template>
 

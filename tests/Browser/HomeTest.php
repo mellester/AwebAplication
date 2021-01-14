@@ -6,6 +6,7 @@ use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Laravel\Dusk\Browser;
 use Tests\DuskTestCase;
 use Tests\Browser\Pages\Homepage;
+use Tests\Browser\Pages\ProductPage;
 
 class HomeTest extends DuskTestCase
 {
@@ -18,7 +19,7 @@ class HomeTest extends DuskTestCase
     {
         $this->browse(function (Browser $browser) {
             $browser->visit(new Homepage)
-                    ->assertSee(config('app.name', 'Laravel'));
+                ->assertSee(config('app.name', 'Laravel'));
         });
     }
 }

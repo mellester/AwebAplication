@@ -19,12 +19,10 @@ for (const key of req.keys()) {
   Vue.component(name, req(key).default);
 } 
 
-const app = document.getElementById('app');
-import * as ErrorBagInteracter from "./Mixins/InteractsWithErrorBags";
-Vue.mixin(ErrorBagInteracter);
+//const app = document.getElementById('app');
+
 
 new Vue({
-    //mixins: [ErrorBagInteracter],
     render: (h) =>
         h(InertiaApp, {
             props: {
@@ -32,4 +30,4 @@ new Vue({
                 resolveComponent: (name) => require(`./Pages/${name}`).default,
             },
         }),
-}).$mount(app);
+}).$mount('#app');

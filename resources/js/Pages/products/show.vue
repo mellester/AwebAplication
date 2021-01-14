@@ -1,7 +1,6 @@
 <template>
   <ProductLayout>
-    <product-show class="m-3"
-    :product="product"/>
+    <product-show class="m-3" :product="product" dusk="vue-product" />
   </ProductLayout>
 </template>
 

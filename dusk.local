@@ -1,0 +1,6 @@
+APP_ENV=testing
+USE_SELENIUM=true
+APP_KEY=base64:8B4INpH9e1ysqLYW89mhyc2fqxKmU1nurOAkghY0+kw=
+
+APP_DEBUG=true
+APP_LOG_LEVEL=debug

@@ -19,7 +19,7 @@ abstract class DuskTestCase extends BaseTestCase
      */
     public static function prepare()
     {
-        if (! static::runningInSail()) {
+        if (!static::runningInSail()) {
             static::startChromeDriver();
         }
     }
@@ -42,14 +42,20 @@ abstract class DuskTestCase extends BaseTestCase
 
         if (env('USE_SELENIUM', 'false') == 'true') {
             return RemoteWebDriver::create(
-                'http://selenium:4444/wd/hub', DesiredCapabilities::chrome()->setCapability(
-                ChromeOptions::CAPABILITY, $options
-            ));
+                'http://selenium:4444/wd/hub',
+                DesiredCapabilities::chrome()->setCapability(
+                    ChromeOptions::CAPABILITY,
+                    $options
+                )
+            );
         } else {
             return RemoteWebDriver::create(
-                'http://localhost:9515', DesiredCapabilities::chrome()->setCapability(
-                ChromeOptions::CAPABILITY, $options
-            ));
+                'http://localhost:4444/wd/hub',
+                DesiredCapabilities::chrome()->setCapability(
+                    ChromeOptions::CAPABILITY,
+                    $options
+                )
+            );
         }
     }
 }

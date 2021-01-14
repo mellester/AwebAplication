@@ -30,3 +30,7 @@ Route::middleware(['auth:sanctum', 'cache:300'])->prefix('v1')->group(
         });
     }
 );
+
+Route::prefix('v1')->group(function (){
+    
+});

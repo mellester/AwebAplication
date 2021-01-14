@@ -47,6 +47,8 @@ services:
             - sail
         depends_on:
             - laravel.test
+        ports:
+            - 4444:4444
     mysql:
         image: 'mysql:8.0'
         ports:
