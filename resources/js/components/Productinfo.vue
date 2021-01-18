@@ -18,7 +18,7 @@
       </div>
       <div class="p-1">
         <jet-responsive-nav-link
-          :href="route('product.index')"
+          :href="route('product.index', [], false)"
           :active="route().current('product.index')"
         >
           <button class="border border-fuchsia-600 rounded">
@@ -37,9 +37,10 @@ export default {
     JetResponsiveNavLink,
   },
   props: {
-    productinfo: { 
-        type: Object,
-        required: true },
+    productinfo: {
+      type: Object,
+      required: true,
+    },
   },
 };
 </script>

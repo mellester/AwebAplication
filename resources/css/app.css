@@ -7,6 +7,40 @@
     display: grid;
 }
 
+.mtable  {
+    @apply min-w-full;
+}
+
+
+.mgrid {
+    display: grid;
+    grid-template-columns: 1fr 4fr 1fr;
+    grid-template-rows: auto;
+  }
+  .mdes {
+    grid-column: 1 / span 3;
+    grid-row: 2;
+  }
+  
+  .mgrid > div {
+    height: 100%;
+  }
+  th {
+    text-align: left;
+  }
+  td {
+    @apply border;
+  }
+  table {
+    max-width: 100rem;
+  }
+  td:nth-child(1) {
+    min-width: 0.5rem;
+  }
+  td:nth-child(n+3):nth-child(-n+4) {
+    text-align: end;
+  }
+
 .mbtn {
     @apply rounded;
     @apply bg-blue-900;

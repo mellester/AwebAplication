@@ -120,7 +120,7 @@ class ProductController extends Controller
             ]),
         );
         $product->update($data);
-        return Redirect::route('product.show', $product);
+        return Redirect::away(route('product.show', $product, false));
     }
 
     /**
@@ -131,6 +131,21 @@ class ProductController extends Controller
      */
     public function destroy($id)
     {
-        //
+        Product::destroy($id);
+        return Redirect::away(route('product.indexyours', [], false));
+    }
+
+    /**
+     * show the for to Publish the resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function editPublish(Product $product)
+    {
+        return Inertia::render(
+            'products/publish',
+            compact('product')
+        );
     }
 }

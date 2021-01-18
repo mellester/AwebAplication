@@ -7,9 +7,15 @@
       :action="route('product.update', product.id, false)"
     >
       <div class="px-4 py-5 sm:px-6">
-        <Button type="submit" class="m-float bg-color-red object-right"
-          >Update1
-        </Button>
+        <Button type="submit" class="m-float object-right">Update </Button>
+        <form
+          @submit.prevent="dellete"
+          :action="route('product.destroy', product.id, false)"
+        >
+          <Button type="submit" class="m-1 m-float bg-red-500 object-right"
+            >Delete
+          </Button>
+        </form>
         <h3 class="text-lg leading-6 font-medium text-gray-900">
           Product Information
         </h3>
@@ -165,6 +171,12 @@ export default {
             console.log(this.$page.errorBags["default"]);
           }
         });
+    },
+    dellete(event) {
+      if (confirm("Do you really want to delete?")) {
+        const action = event.srcElement.action;
+        this.$inertia.delete(action).then(() => console.log("Delelted"));
+      }
     },
   },
 };

@@ -45,7 +45,11 @@
     </tr>
     <tr :class="isExpanded ? '' : 'hidden'">
       <td>
-        <form @submit.prevent="submit" v-if="product.status == 'notPublished'">
+        <form
+          @submit.prevent="submit"
+          v-if="product.status == 'notPublished'"
+          :action="route('product.publish', product.id, false)"
+        >
           <Button type="submit" class="mbtn">Publish</Button>
         </form>
         <Button class="mbtn" v-else>unPublish</Button>
@@ -61,7 +65,9 @@
 import JetResponsiveNavLink from "@/Jetstream/ResponsiveNavLink";
 
 import * as Status from "/resources/js/enums/productStatus.js";
+import sendRequest from "@/Mixins/sendRequest";
 export default {
+  mixins: [sendRequest],
   components: {
     JetResponsiveNavLink,
   },
@@ -86,15 +92,10 @@ export default {
     },
   },
   methods: {
-    submit() {
-      this.form.status = Status.Published;
-      this.$inertia
-        .patch(route("product.update", this.product.id, false), this.form)
-        .then(() => {
-          this.isExpanded = false;
-          this.$inertia.reload({ only: ["products"] });
-        });
-    },
+    // submit(event) {
+    //   const action = event.srcElement.action;
+    //   this.$inertia.get(action);
+    // },
   },
   filters: {
     pretty: function (value) {
