@@ -6,7 +6,8 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\Hash;
 use App\Models\User;
 use App\Enums\productStatus;
-
+use App\Enums\UserType;
+use App\Models\Roles;
 
 class CreateAdminUserAndRoles extends Migration
 {
@@ -21,17 +22,18 @@ class CreateAdminUserAndRoles extends Migration
             $table->id();
             $table->string('slug')->unique();
             $table->string('name');
-            $table->text('permissions');
+            $table->text('permissions')->nullable();
             $table->timestamps();
         });
-        Schema::create('role_user', function (Blueprint $table) {
+        Schema::create('roles_user', function (Blueprint $table) {
             $table->bigInteger('user_id')->unsigned();
-            $table->bigInteger('role_id')->unsigned();
-            $table->primary(['user_id', 'role_id']);
+            $table->bigInteger('roles_id')->unsigned();
+            $table->primary(['user_id', 'roles_id']);
+            $table->timestamps();
         });
-        Schema::table('role_user', function (Blueprint $table) {
+        Schema::table('roles_user', function (Blueprint $table) {
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
-            $table->foreign('role_id')->references('id')->on('roles')->onDelete('cascade');
+            $table->foreign('roles_id')->references('id')->on('roles')->onDelete('cascade');
         });
         Schema::create('products', function (Blueprint $table) {
             $table->id();
@@ -41,6 +43,9 @@ class CreateAdminUserAndRoles extends Migration
             $table->integer('price');
             $table->json('data');
             $table->string('status', 30)->default(productStatus::notPublished);
+            $table->json('offer')->nullable();
+            $table->timestamp('offer_at')->nullable();
+            $table->timestamp('offer_until')->nullable();
             $table->bigInteger('user_id')->unsigned();
             // if (config('product.review')) {
             $table->date('reviewed_at')->nullable();
@@ -55,6 +60,17 @@ class CreateAdminUserAndRoles extends Migration
                 $table->foreign('reviewed_by')->references('id')->on('users')->onDelete('cascade');
             }
         });
+
+        $roles = UserType::getKeys();
+        $data = [];
+        foreach ($roles as $roleName) {
+            array_push($data, [
+                'name' => $roleName,
+                'slug' => UserType::getValue($roleName),
+            ]);
+        }
+        Roles::insert($data);
+
         $data = [
             'name' => 'admin',
             'email' => 'admin@example.com',
@@ -62,9 +78,15 @@ class CreateAdminUserAndRoles extends Migration
 
         ];
         $user = User::firstOrNew($data);
-        //$user->role = UserType::Administrator;
+        $role = Roles::where('slug', UserType::Administrator)->first();
+        $role1 = Roles::create([
+            'name' => 'test,test , test',
+            'slug' => 5,
+        ]);
         $user->save();
-
+        $user->roles()->save($role);
+        $user->roles()->save($role1);
+        //$user->role = UserType::Administrator;
 
     }
 
@@ -84,6 +106,5 @@ class CreateAdminUserAndRoles extends Migration
         Schema::dropIfExists('roles');
         Schema::dropIfExists('role_user');
         Schema::dropIfExists('products');
-        
     }
 }

@@ -92,7 +92,6 @@ class LoginTest extends DuskTestCase
         $user = User::where('email',  self::$userEmail)->first();
         $this->browse(function (Browser $browser) use ($user) {
             $browser->logout();
-
             $browser->visit(new Homepage)
                 ->pause(1000)
                 ->click('#menuBttn')

@@ -67,7 +67,7 @@ import JetResponsiveNavLink from "@/Jetstream/ResponsiveNavLink";
 import * as Status from "/resources/js/enums/productStatus.js";
 import sendRequest from "@/Mixins/sendRequest";
 export default {
-  mixins: [sendRequest],
+  mixins: [sendRequest], // exsposes method "submit"
   components: {
     JetResponsiveNavLink,
   },

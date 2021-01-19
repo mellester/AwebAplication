@@ -8,11 +8,19 @@
     </div>
     <div class="owner text-center">
       For sale by
-      <a> {{ product.owner.name }} </a>
+      <a
+        :href="
+          route().has('user.show')
+            ? route('user.show', product.owner.id, false)
+            : null
+        "
+      >
+        {{ product.owner.name }}
+      </a>
       <br />
-      <span>
+      <span v-if="this.options.timeOffer">
         Offer valid until
-        <time :datetime="offerValid.toLocaleString()">
+        <time>
           {{ offerValid.toLocaleString("en-gb") }}
         </time>
       </span>
@@ -22,7 +30,7 @@
     </div>
     <div class="buyNow justify-self-center">
       <Button class="text-center justify-self-center">Make A offer</Button>
-      <div v-if="options.priceOffer">
+      <div v-if="options.priceOffer && product.price >= 0">
         Price: {{ product.price }}. <br />
         This is a {{ options.priceData }}.
       </div>
@@ -64,12 +72,23 @@ export default {
     },
     offerValid() {
       let date = new Date();
-      const toAdd = this.options.timeData[0];
+      const toAdd = parseInt(this.options.timeData[0]);
+      // console.log(date, this.options.timeData[1], date.getHours());
       switch (this.options.timeData[1]) {
         case Duration.Hour:
-          return date.setHours(date.getHours() + toAdd).toLocaleString();
+          date.setHours(parseInt(date.getHours()) + toAdd);
+          break;
+        case Duration.Month:
+          date.setMonth(date.getMonth() + toAdd);
+          break;
+        case Duration.Week:
+          date.setDate(date.getDate() + toAdd * 7);
+          break;
+        case Duration.Days:
+          date.setDate(date.getDate() + toAdd);
+          break;
       }
-      return date;
+      return date.toLocaleString("en-gb");
     },
   },
 };
@@ -83,14 +102,14 @@ export default {
   width: 40rem;
   height: 40rem;
   grid-template-columns: 1fr 1fr 1fr 30%;
-  grid-template-rows: 1fr 1fr 1fr 1fr 1fr 30%;
+  grid-template-rows: repeat(2, 1fr) 0.8fr 1.2fr 1fr 30%;
   grid-template-areas:
     "pic pic pic name"
     "pic pic pic owner"
     "pic pic pic buy"
     "pic pic pic dat"
     "pic pic pic dat"
-    "des des nul dat";
+    "des des des dat";
 }
 .picture,
 .name,

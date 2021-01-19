@@ -21,16 +21,15 @@ use Illuminate\Http\Request;
 Route::get('/', function () {
     Inertia\Inertia::setRootView('app');
     return Inertia\Inertia::render('Index');
-});
+})->name('landinpage');
 
 Route::middleware(['auth:sanctum', 'verified'])->group(function () {
     Route::get('/dashboard', function (Request $request) {
         $request->user = Auth::user();
-        $productinfo = Route::dispatch(Request::create('/api/v1/DashboardProduct'))->getData()->data;
-        //dump($productinfo);
+        $productInfo = Route::dispatch(Request::create('/api/v1/DashboardProduct'))->getData()->data;
         return Inertia\Inertia::render(
             'Dashboard',
-            compact('productinfo')
+            compact('productInfo')
         );
     })->name('dashboard');
     Route::get('product/indexYours', [ProductController::class, 'indexYours'])
@@ -46,9 +45,6 @@ Route::resource('product', ProductController::class, ['only' => [
 ]]);
 
 Route::get('/test', function (Request $request) {
-    $user = auth()->user() ?? User::find(1);
-    $request->user = $user;
-    dd((new DashboardProduct(Auth::user() ?? User::find(1)))->toArray($request));
 
     return view('test');
 });

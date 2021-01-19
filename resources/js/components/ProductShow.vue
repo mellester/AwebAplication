@@ -2,13 +2,21 @@
 <template>
   <div class="bg-white shadow overflow-hidden sm:rounded-lg">
     <div class="px-4 py-5 sm:px-6">
-      <form v-if="route().has('product.edit')">
+      <div class="m-float" v-if="route().has('product.edit')">
         <JetResponsiveNavLink
-          class="m-float bg-blue-500 object-right"
+          class="bg-blue-500 object-right m-1"
           :href="route('product.edit', product.id, false)"
           >Edit
         </JetResponsiveNavLink>
-      </form>
+        <form
+          class="m-1"
+          @submit.prevent="submit"
+          v-if="product.status == 'notPublished'"
+          :action="route('product.publish', product.id, false)"
+        >
+          <Button type="submit" class="mbtn">Publish</Button>
+        </form>
+      </div>
       <h3 class="text-lg leading-6 font-medium text-gray-900">
         Product Information
       </h3>
@@ -112,19 +120,25 @@
         </div>
       </dl>
     </div>
+    <product-offer v-if="pubilshed" :product="product" :options="offer" />
   </div>
 </template>
 
 <script>
 import Button from "../Jetstream/Button.vue";
 import JetResponsiveNavLink from "@/Jetstream/ResponsiveNavLink";
+import sendRequest from "@/Mixins/sendRequest";
+import productOffer from "/resources/js/components/productOffer.vue";
+import * as Status from "/resources/js/enums/productStatus.js";
+
 export default {
+  mixins: [sendRequest], // exsposes method "submit"
   data() {
     return {
-      ExpandPanle: false,
+      ExpandPanle: !this.pubilshed,
     };
   },
-  components: { Button, JetResponsiveNavLink },
+  components: { Button, JetResponsiveNavLink, productOffer },
   props: {
     product: {
       type: Object,
@@ -132,6 +146,12 @@ export default {
     },
   },
   computed: {
+    offer: function () {
+      return JSON.parse(this.product.offer);
+    },
+    pubilshed: function () {
+      return this.product.status != Status.notPublished;
+    },
     Data: function () {
       return JSON.parse(this.product.data);
     },
@@ -147,6 +167,9 @@ export default {
 <style>
 .m-float {
   float: right;
+  display: flex;
+  flex-direction: row-reverse;
+  padding: 5px;
   margin-top: 1em;
   position: relative;
 }

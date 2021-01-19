@@ -4,7 +4,13 @@
     <product-list :productlist="[this.$page.product]" dusk="vue-product" />
     <div class="container grid">
       <h3>Options</h3>
-      <form action="" class="Options p-3">
+
+      <form
+        @submit.prevent="submitForm"
+        :action="route('product.update', product.id, false)"
+        method="patch"
+        class="Options p-3"
+      >
         <Label class="lcontainer"
           >Limited time offer
           <input
@@ -107,8 +113,10 @@ import * as Duration from "/resources/js/enums/Duration.js";
 import * as PriceOptions from "/resources/js/enums/PriceOptions.js";
 import Button from "../../Jetstream/Button.vue";
 import productOffer from "@/components/productOffer";
+import sendRequest from "@/Mixins/sendRequest";
 
 export default {
+  mixins: [sendRequest],
   components: {
     JetResponsiveNavLink,
     ProductLayout,
@@ -130,7 +138,19 @@ export default {
       PriceEnums: Object.keys(PriceOptions).map((key) => PriceOptions[key]),
     };
   },
-
+  methods: {
+    submitForm: function (event) {
+      return this.submit(event, {
+        ...this.product,
+        offer: JSON.stringify(this.options),
+      });
+    },
+  },
+  computed: {
+    product: function () {
+      return this.$page.product;
+    },
+  },
   Inputprops: {
     product: Object,
   },

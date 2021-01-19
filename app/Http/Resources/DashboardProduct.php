@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 use phpDocumentor\Reflection\Types\Parent_;
 use App\Enums\productStatus;
+
 class DashboardProduct extends JsonResource
 {
     // The below 2 define a MYSQL stament that is used by a migration file to vreate views in the Database
@@ -23,15 +24,17 @@ class DashboardProduct extends JsonResource
               u.email_verified_at,
               u.profile_photo_path,
               COUNT(p.user_id) AS productsTotal,
-              COUNT(if(p.status != 'notPublished', p.id, NULL)) as productsPublished
+              COUNT(if(p.status != 'notPublished', p.id, NULL)) as productsPublished,
+              JSON_ARRAY(GROUP_CONCAT( DISTINCT roles.name)) as roles
             FROM 
                 users as u
-            LEFT OUTER JOIN products AS p
-            ON u.id = p.user_id
+            LEFT OUTER JOIN products AS p ON u.id = p.user_id
+            LEFT JOIN roles_user on roles_user.user_id = u.id
+            LEFT JOIN roles on roles_user.user_id = roles.id
             GROUP BY u.id;
             SQL;
     // public static $test4 = " Hello there %s." . "hi";
-    
+
     // public static $test1 = sprintf(" Hello there %s.", "hi");
     // public static $test2 = sprintf(" Hello there %s.", $notPublished);
     // public static $test3 = sprintf(" Hello there %s.", productStatus::notPublished);
@@ -39,7 +42,6 @@ class DashboardProduct extends JsonResource
     public function __construct($a)
     {
         parent::__construct($a);
-    
     }
     /**
      * Transform the resource into an array.
@@ -51,6 +53,9 @@ class DashboardProduct extends JsonResource
     {
         $id = $this->id;
         $viewName = self::viewName;
-        return (DB::table($viewName)->where('id', $id)->first());
+        $ret = (DB::table($viewName)->where('id', $id)->first());
+        dd($ret);
+        $ret->roles = json_decode(',', $ret->roles);
+        return $ret;
     }
 }

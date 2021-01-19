@@ -2,11 +2,15 @@
 
 namespace Database\Seeders;
 
+use App\Enums\Duration;
+use App\Enums\PriceOptions;
 use App\Enums\productStatus;
+use App\Events\ProductPublished;
 use App\Models\Product;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 
 class ItemsSeeder extends Seeder
@@ -20,26 +24,30 @@ class ItemsSeeder extends Seeder
     {
         // Load a json of DND 5e itmems
         $string = file_get_contents("database/seeders/items-base.json");
-        $json_a = json_decode($string,true);
+        $json_a = json_decode($string, true);
         $toInsert = [];
         $time    = Carbon::now();
-        foreach ($json_a['baseitem'] as $key => $data){
+        foreach ($json_a['baseitem'] as $key => $data) {
             $user = null;
             if ($data['source'] == 'PHB') {
                 $user = User::where('name', 'admin')->first();
+            } else {
+                $user = User::firstOrCreate(
+                    ['name' => $data['source']],
+                    [
+                        'email' => $data['source'] . '@example.com',
+                        'password' => Hash::make('password')
+                    ]
+                );
             }
-            else  {
-                $user = User::firstOrCreate( ['name' => $data['source']],
-                ['email' => $data['source'] . '@example.com',
-                 'password' => Hash::make('password') ]);
-            }
-            $name = $data['name']; unset($data['name']);
+            $name = $data['name'];
+            unset($data['name']);
             $rarity = $data['rarity'] != "none" ? $data['rarity'] : 'normal';
             $description = "A $rarity $name";
 
             $price = $data['value'] ?? -1;
             if (isset($data['entries']) && getType($data['entries'][0]) == getType("")) {
-                $description = implode('\n',$data['entries']);
+                $description = implode('\n', $data['entries']);
             }
             $tmp = array(
                 'user_id' => $user->id,
@@ -49,17 +57,26 @@ class ItemsSeeder extends Seeder
                 'description' => $description,
                 'created_at' => $time
             );
-            if ($key < 5) {
-                $tmp['status'] = productStatus::Published;
-            }
-            else {
-                $tmp['status'] = productStatus::notPublished;
-            }
-            array_push ( $toInsert, $tmp);
+            array_push($toInsert, $tmp);
 
             $time = $time->addHour(-1);
             //echo  $key . ':' . print_r($itemData) . '\n';
         }
         Product::insert($toInsert);
+        $groups = Product::get()->groupBy('user_id')->map(function ($deal) {
+            return $deal->take(3);
+        });
+        foreach ($groups as $products) {
+            foreach ($products as $product) {
+                $product->offer = json_encode(array(
+                    "timeOffer" => true,
+                    "timeData" => [6, Duration::Hour],
+                    "priceOffer" => true,
+                    "priceData" => PriceOptions::SuggestPrice,
+                    "PremOffer" => false,
+                ));
+                $product->save();
+            }
+        }
     }
 }

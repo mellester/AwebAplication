@@ -2,12 +2,17 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\Duration;
+use App\Enums\productStatus;
+use App\Events\ProductPublished;
+use App\Events\ProductUpdated;
 use App\Models\Product;
 use Facade\Ignition\DumpRecorder\Dump;
 use Inertia\Inertia;
 
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 
@@ -104,7 +109,7 @@ class ProductController extends Controller
      */
     public function update(Request $request, Product $product)
     {
-        dd($product, $request);
+        // dd($product, $request);
         if ($product->user_id != Auth::user()->id) {
             return Redirect::back()->withErrors(['default' => 'You do not own this resource']);
         }
@@ -120,6 +125,24 @@ class ProductController extends Controller
             ]),
         );
         $product->update($data);
+        ProductUpdated::dispatchIf(
+            $product->wasChanged(),
+            $product->id
+        );
+        if ($request->has('offer')) {
+            $items = $request->input('offer');
+            $it_1 = json_decode($items, TRUE) ?? [];
+            $it_2 = json_decode($product->offer, TRUE) ?? [];
+            $result_array = array_diff($it_1, $it_2);
+            if (empty($result_array[0])) {
+                // dump($result_array);
+                // dump("We have a new offer ");
+                $product->offer = $request->input('offer');
+                // calls Product::setOfferAttribute
+            } else {
+                // dump("We do not have a new offer ");
+            }
+        }
         return Redirect::away(route('product.show', $product, false));
     }
 

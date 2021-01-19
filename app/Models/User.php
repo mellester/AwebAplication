@@ -69,4 +69,9 @@ class User extends Authenticatable
     {
         return  $this->hasMany(Product::class);
     }
+
+    public function roles()
+    {
+        return $this->belongsToMany(Roles::class)->withTimestamps();
+    }
 }
