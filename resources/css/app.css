@@ -46,3 +46,26 @@
     @apply bg-blue-900;
     @apply text-white;
 }
+
+.mbtn > .block {
+  color: #000 !important;
+}
+
+.jet-button {
+@apply inline-flex;
+@apply items-center;
+@apply px-4;
+@apply py-2;
+@apply bg-gray-800;
+@apply border;
+@apply border-transparent;
+@apply rounded-md;
+@apply font-semibold;
+@apply text-xs;
+@apply text-white;
+@apply uppercase;
+@apply tracking-widest;
+@apply transition;
+@apply ease-in-out;
+@apply duration-150;
+}

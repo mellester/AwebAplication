@@ -12,8 +12,8 @@
         </h2>
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
           <JetResponsiveNavLink
-            :href="route('product.indexyours', [], false)"
-            :active="route().current('product.indexyours')"
+            :href="route('product.indexYours', [], false)"
+            :active="route().current('product.indexYours')"
           >
             Your Products
           </JetResponsiveNavLink>

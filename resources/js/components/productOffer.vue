@@ -18,10 +18,10 @@
         {{ product.owner.name }}
       </a>
       <br />
-      <span v-if="this.options.timeOffer">
+      <span v-if="this.optionsC.timeOffer">
         Offer valid until
         <time>
-          {{ offerValid.toLocaleString("en-gb") }}
+          {{ offerValid(optionsC) }}
         </time>
       </span>
     </div>
@@ -29,17 +29,29 @@
       {{ product.description }}
     </div>
     <div class="buyNow justify-self-center">
-      <Button class="text-center justify-self-center">Make A offer</Button>
-      <div v-if="options.priceOffer && product.price >= 0">
+      <JetResponsiveNavLink
+        :href="route('product.userOffers.index', product.id, false)"
+        class="text-center justify-self-center jet-button"
+        >Make A offer
+      </JetResponsiveNavLink>
+      <div v-if="optionsC.priceOffer && product.price >= 0">
         Price: {{ product.price }}. <br />
-        This is a {{ options.priceData }}.
+        This is a {{ optionsC.priceData }}.
       </div>
     </div>
-    <ul class="dat p-1 border border-gray-400">
+    <ul class="dat p-1 border border-gray-400" ref="data">
       <li v-for="(item, key, i) in data" v-bind:key="i">
         {{ key }}
         <span class="float-right justify-self-end">{{ item }} </span>
       </li>
+      <div class="overlfow" v-if="isOverflown">
+        <JetResponsiveNavLink
+          :href="route('product.show', this.product.id, false)"
+          class="mbtn"
+        >
+          Show more
+        </JetResponsiveNavLink>
+      </div>
     </ul>
   </div>
 </template>
@@ -48,10 +60,12 @@
 import JetResponsiveNavLink from "@/Jetstream/ResponsiveNavLink";
 import * as Status from "/resources/js/enums/productStatus.js";
 import * as Duration from "/resources/js/enums/Duration.js";
+import ErrorBagInteracter from "/resources/js/Mixins/InteractsWithErrorBags.js";
 
 import Button from "../Jetstream/Button.vue";
 
 export default {
+  mixins: [ErrorBagInteracter],
   components: {
     JetResponsiveNavLink,
     Button,
@@ -63,33 +77,35 @@ export default {
     },
     options: {
       type: Object,
-      required: true,
     },
   },
   computed: {
+    optionsC() {
+      return this.options ? this.options : JSON.parse(this.product.offer) ?? [];
+    },
     data() {
       return JSON.parse(this.product.data) ?? [];
     },
-    offerValid() {
-      let date = new Date();
-      const toAdd = parseInt(this.options.timeData[0]);
-      // console.log(date, this.options.timeData[1], date.getHours());
-      switch (this.options.timeData[1]) {
-        case Duration.Hour:
-          date.setHours(parseInt(date.getHours()) + toAdd);
-          break;
-        case Duration.Month:
-          date.setMonth(date.getMonth() + toAdd);
-          break;
-        case Duration.Week:
-          date.setDate(date.getDate() + toAdd * 7);
-          break;
-        case Duration.Days:
-          date.setDate(date.getDate() + toAdd);
-          break;
+    isOverflown() {
+      if (this.isMounted) {
+        const {
+          clientWidth,
+          clientHeight,
+          scrollWidth,
+          scrollHeight,
+        } = this.$refs.data;
+        return scrollHeight > clientHeight || scrollWidth > clientWidth;
       }
-      return date.toLocaleString("en-gb");
+      return false;
     },
+  },
+  data() {
+    return {
+      isMounted: false,
+    };
+  },
+  mounted() {
+    this.isMounted = true;
   },
 };
 </script>
@@ -110,11 +126,13 @@ export default {
     "pic pic pic dat"
     "pic pic pic dat"
     "des des des dat";
+  font-size: initial;
 }
 .picture,
 .name,
 .des,
 .buyNow {
+  font-size: initial;
   overflow-wrap: break-word;
 }
 .picture {
@@ -131,11 +149,28 @@ export default {
 }
 .dat {
   grid-area: dat;
+  overflow: hidden;
+  position: relative;
 }
 .buyNow {
   grid-area: buy;
 }
 .owner {
   grid-area: owner;
+}
+.overlfow {
+  position: absolute;
+  text-align: center;
+  align-self: center;
+  min-width: 100%;
+  opacity: 0.8;
+  @apply m-1;
+  background-color: beige;
+  bottom: 0;
+}
+
+.mbtn {
+  background-color: rgba(35, 56, 118);
+  color: #000 !important;
 }
 </style>

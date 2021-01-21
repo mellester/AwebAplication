@@ -2,7 +2,7 @@
 <template>
   <div class="bg-white shadow overflow-hidden sm:rounded-lg">
     <div class="px-4 py-5 sm:px-6">
-      <div class="m-float" v-if="route().has('product.edit')">
+      <div class="m-float" v-if="route().has('product.edit') && !isGUEST">
         <JetResponsiveNavLink
           class="bg-blue-500 object-right m-1"
           :href="route('product.edit', product.id, false)"
@@ -52,7 +52,7 @@
               "
             >
               {{
-                product.user_id == this.$inertia.page.props.user.id
+                !isGUEST && product.user_id == this.$inertia.page.props.user.id
                   ? "You"
                   : product.owner.name
               }}
@@ -146,6 +146,9 @@ export default {
     },
   },
   computed: {
+    isGUEST: function () {
+      return !this.$inertia.page.props.user;
+    },
     offer: function () {
       return JSON.parse(this.product.offer);
     },

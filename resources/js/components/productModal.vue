@@ -10,7 +10,7 @@
         {{ product.name }}
       </td>
       <td id="Cost">
-        {{ product.price }}
+        {{ product.price > 0 ? product.price : "-----" }}
       </td>
       <td id="Weight">
         {{ Data.weight }}

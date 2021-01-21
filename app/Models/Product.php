@@ -99,7 +99,7 @@ class Product extends Model
 		$result_array = array_diff($it_1, $it_2);
 		if (empty($result_array[0])) {
 			// dump($result_array);
-			dump("We have a new offer ");
+			// dump("We have a new offer ");
 			$this->attributes['offer'] = $newValue;
 			$this->status = productStatus::Published();
 			if ($it_1['PremOffer']) {

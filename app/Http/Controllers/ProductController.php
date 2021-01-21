@@ -155,7 +155,7 @@ class ProductController extends Controller
     public function destroy($id)
     {
         Product::destroy($id);
-        return Redirect::away(route('product.indexyours', [], false));
+        return Redirect::away(route('product.indexYours', [], false));
     }
 
     /**
@@ -168,6 +168,19 @@ class ProductController extends Controller
     {
         return Inertia::render(
             'products/publish',
+            compact('product')
+        );
+    }
+    /**
+     * show the for to Offer page
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function offer(Product $product)
+    {
+        return Inertia::render(
+            'products/offer',
             compact('product')
         );
     }

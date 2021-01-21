@@ -16,23 +16,28 @@ class DashboardProduct extends JsonResource
     const viewName = "DashboardProduct";
     private static string $notPublished = productStatus::notPublished;
     public static $viewSQLQuery = <<<SQL
-            SELECT 
-              u.id,
-              u.name,
-              u.email,
-              u.created_at,
-              u.email_verified_at,
-              u.profile_photo_path,
-              COUNT(p.user_id) AS productsTotal,
-              COUNT(if(p.status != 'notPublished', p.id, NULL)) as productsPublished,
-              JSON_ARRAY(GROUP_CONCAT( DISTINCT roles.name)) as roles
-            FROM 
-                users as u
-            LEFT OUTER JOIN products AS p ON u.id = p.user_id
-            LEFT JOIN roles_user on roles_user.user_id = u.id
-            LEFT JOIN roles on roles_user.user_id = roles.id
-            GROUP BY u.id;
-            SQL;
+    WITH subq as (   
+        SELECT 
+        u.id,
+        u.name,
+        u.email,
+        u.created_at,
+        u.email_verified_at,
+        u.profile_photo_path,
+        JSON_ARRAYAGG( roles.name ) as roles
+        FROM users as u
+        LEFT  JOIN   roles_user on roles_user.user_id = u.id
+        LEFT  JOIN  roles on roles_user.roles_id = roles.id
+        GROUP BY u.id
+    ) SELECT
+     subq.*,
+     COUNT(p.user_id) AS productsTotal,
+     COUNT(if(p.status != 'notPublished', p.id, NULL)) as productsPublished
+     FROM subq
+     LEFT OUTER JOIN products AS p ON subq.id = p.user_id
+     GROUP BY subq.id
+     ;
+    SQL;
     // public static $test4 = " Hello there %s." . "hi";
 
     // public static $test1 = sprintf(" Hello there %s.", "hi");
@@ -54,8 +59,7 @@ class DashboardProduct extends JsonResource
         $id = $this->id;
         $viewName = self::viewName;
         $ret = (DB::table($viewName)->where('id', $id)->first());
-        dd($ret);
-        $ret->roles = json_decode(',', $ret->roles);
+        $ret->roles = json_decode($ret->roles);
         return $ret;
     }
 }
