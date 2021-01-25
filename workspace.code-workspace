@@ -2,7 +2,8 @@
     "settings": {
         "editor.formatOnSave": true,
         "cSpell.words": [
-            "Carbon"
+            "Carbon",
+            "fillable"
         ]
     },
     "folders": [

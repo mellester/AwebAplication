@@ -8,6 +8,7 @@ use App\Events\ProductPublished;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Product extends Model
 {
@@ -91,6 +92,12 @@ class Product extends Model
 		}
 		return 0;
 	}
+
+	public function UserOffers()
+	{
+		return $this->HasMany(UserOffer::class)->orderBy('updated_at', 'asc');
+	}
+
 	public function setOfferAttribute($newValue)
 	{
 

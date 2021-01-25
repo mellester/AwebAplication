@@ -2,12 +2,14 @@
 
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\UserOfferController;
+use App\Http\Middleware\AllowProxy;
 use Illuminate\Support\Facades\Route;
 use App\Http\Resources\DashboardProduct;
 use App\Models\Product;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Broadcast;
 
 /*
 |--------------------------------------------------------------------------
@@ -20,13 +22,15 @@ use Illuminate\Http\Request;
 |
 */
 
+// Broadcast::routes();
+
 Route::get('/', function () {
     $productsPaginate = Product::paginate(15);
     Inertia\Inertia::setRootView('app');
     return Inertia\Inertia::render('Index', compact('productsPaginate'));
 })->name('landinpage');
 
-Route::middleware(['auth:sanctum', 'verified'])->group(function () {
+Route::middleware(['auth:sanctum', 'verified', AllowProxy::class])->group(function () {
     Route::get('/dashboard', function (Request $request) {
         $request->user = Auth::user();
         $productInfo = Route::dispatch(Request::create('/api/v1/DashboardProduct'))->getData()->data;

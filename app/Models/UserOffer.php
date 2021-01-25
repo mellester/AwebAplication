@@ -14,7 +14,15 @@ class UserOffer extends Model
     {
         return function (Blueprint $table) {
             $table->id();
+            $table->foreignId('product_id')->index()->constrained();
+            $table->foreignId('user_id')->index()->constrained('users');
             $table->integer('price')->unsigned();
+            $table->timestamps();
         };
     }
+
+    protected $fillable = ['price', 'user_id'];
+    public const ValidatorRules = array(
+        'price' => 'required | numeric',
+    );
 }

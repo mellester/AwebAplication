@@ -2,9 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\ProductOfferUpdated;
 use App\Models\Product;
 use App\Models\UserOffer;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Validator;
 use Inertia\Inertia;
 
 class UserOfferController extends Controller
@@ -16,6 +20,8 @@ class UserOfferController extends Controller
      */
     public function index(Product $product)
     {
+        $product = $product->load('UserOffers');
+        // dd($product);
         return Inertia::render(
             'products/UserOffer',
             compact('product')
@@ -38,9 +44,21 @@ class UserOfferController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Request $request, Product $product)
     {
-        dd($request);
+        // dd(true);
+        $validator = Validator::make($request->all(), UserOffer::ValidatorRules);
+        if ($validator->fails()) {
+            return redirect()->back()->withErrors($validator->errors());
+        }
+        $ret = $product->UserOffers()->create(
+            array_merge(
+                $validator->validated(),
+                ['user_id' => Auth::user()->id]
+            )
+        );
+        ProductOfferUpdated::dispatch($product->id, $ret->id);
+        return Redirect()->back()->with('success', 'Successfully created a new offer for this product');
     }
 
     /**

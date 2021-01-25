@@ -14,6 +14,14 @@ export default {
 
             return this.$page.errorBags[bag][key][0];
         },
+        hasSuccess() {
+            return this.$page.flash['success'];
+        },
+        /**
+         * A helper fucntion to detrimne a date in th future is valid
+         * @param {*} optionsC 
+         * @param {*} time 
+         */
         offerValid(optionsC, time = null) {
             let date = new Date();
             if (time != null)

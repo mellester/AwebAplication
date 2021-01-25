@@ -324,15 +324,27 @@
     <!-- Modal Portal -->
     <portal-target name="modal" multiple> </portal-target>
 
+    <Modal :show="displayedWaiting" @close="closeModal">
+      <template #content>
+        sending Request
+        <div class="loader">Loading...</div>
+      </template>
+    </Modal>
     <!--- Error modal -->
     <Modal :show="showingErrorModal" @close="closeModal">
       <template #content>
-        showingErrorModal
+        There are errors
         <ul>
           <li v-for="items in errorbag" v-bind:key="items.key">
             {{ items }}
           </li>
         </ul>
+      </template>
+    </Modal>
+    <!-- succes modal -->
+    <Modal :show="showingSuccesModal" @close="closeModal">
+      <template #content>
+        {{ $page.flash.success }}
       </template>
     </Modal>
   </div>
@@ -362,20 +374,18 @@ export default {
   data() {
     return {
       showingNavigationDropdown: false,
-      showingErrorModal: false,
       ExitErrorModal: false,
     };
   },
   beforeUpdate() {
     if (this.hasErrors("default")) {
-      this.showingErrorModal = true;
       console.log("showing erros");
     }
   },
   methods: {
     closeModal(bag = "default") {
-      Vue.delete(this.$page.errorBags[bag], bag);
-      this.showingErrorModal = false;
+      this.$delete(this.$page.errorBags, bag);
+      this.$delete(this.$page.flash, "success");
     },
     switchToTeam(team) {
       this.$inertia.put(
@@ -395,10 +405,70 @@ export default {
       });
     },
   },
+  watch: {
+    "window.sendingRequest": function () {
+      console.log("hi from sendingRequest");
+    },
+  },
   computed: {
+    displayedWaiting: function () {
+      return this.$store.state.sendingRequest;
+    },
+    showingErrorModal: function () {
+      return this.hasErrors("default");
+    },
+    showingSuccesModal: function () {
+      return this.hasSuccess();
+    },
     errorbag: function () {
       return this.$page.errorBags.default;
     },
   },
 };
 </script>
+
+<style scoped>
+/* https://projects.lukehaas.me/css-loaders/ */
+.loader,
+.loader:after {
+  border-radius: 50%;
+  width: 10em;
+  height: 10em;
+  /* background-color: black; */
+}
+.loader {
+  margin: 60px auto;
+  font-size: 10px;
+  position: relative;
+  text-indent: -9999em;
+  border-top: 1.1em solid rgba(0, 0, 0, 0.2);
+  border-right: 1.1em solid rgba(0, 0, 0, 0.2);
+  border-bottom: 1.1em solid rgba(0, 0, 0, 0.2);
+  border-left: 1.1em solid #ffffff;
+  -webkit-transform: translateZ(0);
+  -ms-transform: translateZ(0);
+  transform: translateZ(0);
+  -webkit-animation: load8 1.1s infinite linear;
+  animation: load8 2s infinite linear;
+}
+@-webkit-keyframes load8 {
+  0% {
+    -webkit-transform: rotate(0deg);
+    transform: rotate(0deg);
+  }
+  100% {
+    -webkit-transform: rotate(360deg);
+    transform: rotate(360deg);
+  }
+}
+@keyframes load8 {
+  0% {
+    -webkit-transform: rotate(0deg);
+    transform: rotate(0deg);
+  }
+  100% {
+    -webkit-transform: rotate(360deg);
+    transform: rotate(360deg);
+  }
+}
+</style>

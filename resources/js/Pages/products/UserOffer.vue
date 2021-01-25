@@ -18,6 +18,7 @@
         </li>
       </ul>
       <form
+        @submit.prevent="submitForm"
         :action="route('product.userOffers.store', product.id, false)"
         method="post"
       >
@@ -27,6 +28,11 @@
         </Label>
         <Button class="jet-button">Submit</Button>
       </form>
+      <ul>
+        <li v-for="(index, key) in product.user_offers" v-bind:key="key">
+          {{ index.created_at }}
+        </li>
+      </ul>
     </div>
   </ProductLayout>
 </template>
@@ -49,17 +55,16 @@ export default {
     product: Object,
   },
   data() {
-    debugger;
     return {
       form: {
         price: this.product.props,
-        _token: this.$page.props.csrf_token,
       },
     };
   },
   methods: {
     submitForm: function (event) {
-      return this.submit(event, this.form);
+      // The form data is read form the dom
+      return this.submit(event);
     },
   },
   computed: {
