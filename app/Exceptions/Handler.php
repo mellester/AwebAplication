@@ -2,7 +2,11 @@
 
 namespace App\Exceptions;
 
+use Carbon\Carbon;
+use Exception;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Throwable;
 
 class Handler extends ExceptionHandler
@@ -36,5 +40,25 @@ class Handler extends ExceptionHandler
         $this->reportable(function (Throwable $e) {
             //
         });
+    }
+
+    /**
+     * This custom method renders they $excetion to a html file and stores it      *
+     * @param  \Throwable  $e
+     * @return void
+     *
+     * @throws \Throwable
+     */
+    public function report(Throwable $exception)
+    {
+
+
+        $filename = storage_path() . '/logs/' . Carbon::now()->toDateTimeLocalString() . '.html';
+        $r = new Request();
+        $data = $this->render($r, $exception);
+        file_put_contents($filename, $data);
+        copy($filename, storage_path() . '/logs/' . 'last-error.html');
+
+        parent::report($exception);
     }
 }

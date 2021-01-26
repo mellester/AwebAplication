@@ -51,6 +51,10 @@ class UserOfferController extends Controller
         if ($validator->fails()) {
             return redirect()->back()->withErrors($validator->errors());
         }
+        $maxPrice = ($product->UserOffers()->max('price'));
+        if ($validator->validated()['price'] <= $maxPrice) {
+            return redirect()->back()->withErrors("The offer you made is lower than the current highest offer");
+        }
         $ret = $product->UserOffers()->create(
             array_merge(
                 $validator->validated(),

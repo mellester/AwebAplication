@@ -31,6 +31,7 @@
         "webpack": "4.x"
     },
     "dependencies": {
+        "http-proxy-middleware": "^1.0.6",
         "vuex": "^3.6.0"
     }
 }

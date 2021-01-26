@@ -24,13 +24,21 @@
       >
         Please enter what you would like to offer for this product.
         <Label>
-          Price <Input name="price" number v-model="this.form.price" />
+          Price
+          <Input
+            name="price"
+            type="number"
+            v-model="this.form.price"
+            :min="minOffer + 0.1"
+            step="0.10"
+          />
         </Label>
         <Button class="jet-button">Submit</Button>
       </form>
       <ul>
         <li v-for="(index, key) in product.user_offers" v-bind:key="key">
-          {{ index.created_at }}
+          {{ index.created_at }} <br />
+          {{ index.price }}
         </li>
       </ul>
     </div>
@@ -67,9 +75,18 @@ export default {
       return this.submit(event);
     },
   },
+  mounted: function () {},
   computed: {
     options() {
       return JSON.parse(this.product.offer);
+    },
+    highestOffer() {
+      return this.product.user_offers.reduce((lhs, rhs) =>
+        lhs.price > rhs.price ? lhs : rhs
+      );
+    },
+    minOffer: function () {
+      return this.highestOffer.price;
     },
   },
 };

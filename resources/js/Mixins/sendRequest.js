@@ -18,7 +18,6 @@ export default {
                     new FormData(event.target).entries()
                 ));
             }
-            console.log('hi');
             this.$store.commit('sendingRequest', true);
             this.$inertia.visit(action, {
                 method: method,

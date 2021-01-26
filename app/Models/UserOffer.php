@@ -25,4 +25,9 @@ class UserOffer extends Model
     public const ValidatorRules = array(
         'price' => 'required | numeric',
     );
+
+    public function product()
+    {
+        return $this->belongsTo(Product::class);
+    }
 }
