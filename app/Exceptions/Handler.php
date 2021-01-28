@@ -55,6 +55,7 @@ class Handler extends ExceptionHandler
 
         $filename = storage_path() . '/logs/' . Carbon::now()->toDateTimeLocalString() . '.html';
         $r = new Request();
+        dd($exception);
         $data = $this->render($r, $exception);
         file_put_contents($filename, $data);
         copy($filename, storage_path() . '/logs/' . 'last-error.html');

@@ -4,6 +4,7 @@ namespace App\Jobs;
 
 use App\Mail\OrderOffer;
 use App\Models\Product;
+use App\Models\User;
 use App\Models\UserOffer;
 use Illuminate\Bus\Queueable;
 use Throwable;
@@ -30,13 +31,16 @@ class ProcessOffer implements ShouldQueue
     }
 
     /**
-     * Execute the job.
+     * Execute the job. as
+     * 
      *
      * @return void
      */
     public function handle()
     {
-        $email = $this->productOffer->product()->owner()->email;
-        Mail::to($email)->send(new OrderOffer());
+        //dd($this->productOffer);
+        $user = User::find($this->productOffer->product->owner->id);
+        $email = $user->email;
+        Mail::to($email)->send(new OrderOffer($this->productOffer));
     }
 }

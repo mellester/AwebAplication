@@ -4,6 +4,20 @@
         "cSpell.words": [
             "Carbon",
             "fillable"
+        ],
+        "logViewer.watch": [
+            {
+                "title": "laravel log.log",
+                "pattern": "/home/melle/AwebAplication/storage/logs/log.log"
+            },
+            {
+                "title": "laravel-worker.log",
+                "pattern": "/home/melle/AwebAplication/storage/logs/laravel-worker.log"
+            },
+            {
+                "title": "logWebscoket.log",
+                "pattern": "/home/melle/AwebAplication/storage/logs/logWebscoket*"
+            }
         ]
     },
     "folders": [
