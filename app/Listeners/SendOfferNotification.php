@@ -34,8 +34,8 @@ class SendOfferNotification
         try {
             ProcessOffer::dispatch($event->offer);
         } catch (Throwable $e) {
-            error_log('catch a error');
-            Log::critical('Error  ' . $e->getMessage());
+            // error_log('catch a error');
+            //Log::critical('Error  ' . $e->getMessage());
             //error_log($e->getMessage());
         }
     }

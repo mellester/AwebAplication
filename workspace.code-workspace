@@ -7,8 +7,12 @@
         ],
         "logViewer.watch": [
             {
-                "title": "laravel log.log",
+                "title": "laravel stdout.log",
                 "pattern": "/home/melle/AwebAplication/storage/logs/log.log"
+            },
+            {
+                "title": "laravel log.log",
+                "pattern": "/home/melle/AwebAplication/storage/logs/laravel.log"
             },
             {
                 "title": "laravel-worker.log",

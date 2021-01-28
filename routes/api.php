@@ -5,7 +5,8 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Resources\DashboardProduct;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Middleware\CacheMiddleware;
-
+use App\Http\Resources\PublishedProduct;
+use App\Models\Product;
 
 /*
 |--------------------------------------------------------------------------
@@ -23,14 +24,20 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 
-Route::middleware(['auth:sanctum', 'cache:300'])->prefix('v1')->group(
+Route::middleware(['cache:300,true'])->prefix('v1')->group(
     function () {
         Route::get('/DashboardProduct', function (Request $request) {
-            return new DashboardProduct(Auth::user());
+            if (!Auth::guest()) {
+                return new DashboardProduct(Auth::user());
+            } else {
+                return [];
+            }
+        });
+        Route::get('/PublishedProduct', function () {
+            return new PublishedProduct(Product::find(1));
         });
     }
 );
 
-Route::prefix('v1')->group(function (){
-    
+Route::prefix('v1')->group(function () {
 });

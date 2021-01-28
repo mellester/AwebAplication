@@ -1,5 +1,6 @@
 <?php
 
+use App\Enums\productStatus;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\UserOfferController;
 use App\Http\Middleware\AllowProxy;
@@ -7,9 +8,11 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Resources\DashboardProduct;
 use App\Models\Product;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Broadcast;
+use Illuminate\Support\Facades\DB;
 
 /*
 |--------------------------------------------------------------------------
@@ -25,19 +28,19 @@ use Illuminate\Support\Facades\Broadcast;
 // Broadcast::routes();
 
 Route::get('/', function () {
-    $productsPaginate = Product::paginate(15);
+    $PublishedProductApi = Route::dispatch(Request::create('api/v1/PublishedProduct'))->getData();
     Inertia\Inertia::setRootView('app');
-    return Inertia\Inertia::render('Index', compact('productsPaginate'));
+    return Inertia\Inertia::render('Index', compact('PublishedProductApi'));
 })->name('landinpage');
 
 Route::middleware(['auth:sanctum', 'verified', AllowProxy::class])->group(function () {
     Route::get('/dashboard', function (Request $request) {
         $request->user = Auth::user();
-        $productInfo = Route::dispatch(Request::create('/api/v1/DashboardProduct'))->getData()->data;
+        $productinfoApi = Route::dispatch(Request::create('/api/v1/DashboardProduct'))->getData();
         // dump(compact('productInfo'));
         return Inertia\Inertia::render(
             'Dashboard',
-            compact('productInfo')
+            compact('productinfoApi')
         );
     })->name('dashboard');
     Route::resource('product.userOffers', UserOfferController::class)->shallow();

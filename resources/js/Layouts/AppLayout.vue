@@ -359,9 +359,10 @@ import JetResponsiveNavLink from "@/Jetstream/ResponsiveNavLink";
 import ErrorBagInteracter from "../Mixins/InteractsWithErrorBags";
 import Modal from "../Jetstream/DialogModal.vue";
 import Vue from "vue";
+import layoutMixin from "/resources/js/Mixins/layoutMixin.js";
 
 export default {
-  mixins: [ErrorBagInteracter],
+  mixins: [ErrorBagInteracter, layoutMixin],
   components: {
     JetApplicationMark,
     JetDropdown,

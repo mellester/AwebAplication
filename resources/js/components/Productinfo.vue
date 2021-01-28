@@ -37,11 +37,16 @@ export default {
     JetResponsiveNavLink,
   },
   props: {
-    productinfo: {
+    productinfoApi: {
       type: Object,
       required: true,
     },
   },
+  computed: {
+    productinfo: function() {
+      return this.productinfoApi.data;
+    }
+  }
 };
 </script>
 

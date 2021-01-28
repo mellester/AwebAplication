@@ -9,8 +9,9 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 use phpDocumentor\Reflection\Types\Parent_;
 use App\Enums\productStatus;
+use Carbon\Carbon;
 
-class DashboardProduct extends JsonResource
+class DashboardProduct extends InternalApiResource
 {
     // The below 2 define a MYSQL stament that is used by a migration file to vreate views in the Database
     const viewName = "DashboardProduct";
@@ -54,7 +55,7 @@ class DashboardProduct extends JsonResource
      * @param  \Illuminate\Http\Request  $request
      * @return array
      */
-    public function toArray($request)
+    public function itsData($request)
     {
         $id = $this->id;
         $viewName = self::viewName;

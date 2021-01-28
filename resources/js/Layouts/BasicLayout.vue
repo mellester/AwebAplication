@@ -54,7 +54,10 @@
 </template>
 
 <script>
+import layoutMixin from "/resources/js/Mixins/layoutMixin.js";
+
 export default {
+  mixins: [layoutMixin],
   props: {
     title: String,
   },
