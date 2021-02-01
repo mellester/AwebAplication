@@ -18,8 +18,9 @@ mix.js('resources/js/app.js', 'public/js')
         require('postcss-import'),
         require('tailwindcss'),
     ])
+    .sourceMaps()
     .webpackConfig(require('./webpack.config'));
-mix.sourceMaps(true);
+
 const { URL } = require('url');
 mix.browserSync({
     proxy: {

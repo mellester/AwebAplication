@@ -2,7 +2,8 @@
   <div class="container border body">
     <img class="picture m-4" src="https://picsum.photos/400" sizes="400" />
     <div class="name mt-5 text-center text-lg">
-      <h1>{{ product.name }}</h1>
+      <span v-html="replace(product.name)" />
+
       <!-- <br />
       {{ product.name }} -->
     </div>
@@ -15,7 +16,7 @@
             : null
         "
       >
-        {{ product.owner.name }}
+        <span v-html="replace(product.owner.name)" />
       </a>
       <br />
       <span v-if="this.optionsC.timeOffer">
@@ -26,7 +27,7 @@
       </span>
     </div>
     <div class="des">
-      {{ product.description }}
+      <span v-html="replace(product.description)" />
     </div>
     <div class="buyNow justify-self-center">
       <JetResponsiveNavLink
@@ -35,14 +36,17 @@
         >Make A offer
       </JetResponsiveNavLink>
       <div v-if="optionsC.priceOffer && product.price >= 0">
-        Price: {{ product.price }}. <br />
+        Price:
+        <span v-html="replace(product.price)" />. <br />
         This is a {{ optionsC.priceData }}.
       </div>
     </div>
     <ul class="dat p-1 border border-gray-400" ref="data">
       <li v-for="(item, key, i) in data" v-bind:key="i">
-        {{ key }}
-        <span class="float-right justify-self-end">{{ item }} </span>
+        <span v-html="replace(key)" />
+        <span class="float-right justify-self-end">
+          <span v-html="replace(item)" />
+        </span>
       </li>
       <div class="overlfow" v-if="isOverflown">
         <JetResponsiveNavLink
@@ -75,8 +79,25 @@ export default {
       type: Object,
       required: true,
     },
+    search: {
+      type: String,
+    },
     options: {
       type: Object,
+    },
+  },
+  methods: {
+    replace(text) {
+      if (this.search) {
+        return String(text).replace(
+          new RegExp(this.search.trim(), "gi"),
+          (match) => {
+            return '<span class="highlightText">' + match + "</span>";
+          }
+        );
+      } else {
+        return text;
+      }
     },
   },
   computed: {

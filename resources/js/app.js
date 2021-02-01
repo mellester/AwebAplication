@@ -6,10 +6,14 @@ import Vue from 'vue';
 import Vuex from 'vuex'
 import searchPlugin from 'vuex-search';
 import state from './store/state';
+import actions from './store/actions';
 
 import { InertiaApp } from '@inertiajs/inertia-vue';
 import { InertiaForm } from 'laravel-jetstream';
 import PortalVue from 'portal-vue';
+import VueRx from 'vue-rx'
+
+Vue.use(VueRx);
 
 Vue.mixin({ methods: { route } });
 Vue.use(InertiaApp);
@@ -45,27 +49,27 @@ const store = new Vuex.Store({
                 state[key] = payload.data.data;
             }
             else {
-                state[key].push(...payload.data.data);
+                payload.data.data.forEach(element => {
+                    let index = state[key].findIndex((value => value.id == element.id))
+                    if (index == -1)
+                        state[key].push(element);
+                    else {
+                        state[key][index] = (element);
+                    }
+                });
             }
             state[key + 'Api'] = payload.data;
         },
     },
-    actions: {
-        async load(context, key) {
-            console.log(key);
-
-            var result = await axios.get(context[key].next_page_url);
-            context.commit("setInitState", { data: result.data, key: key.slice(0, -3) });
-        }
-    },
+    actions,
     plugins: [
         searchPlugin({
             resources: {
-                contacts: {
+                Products: {
                     // what fields to index
-                    index: ['address', 'name'],
+                    index: ['name', 'data', 'description'],
                     // access the state to be watched by Vuex Search
-                    getter: state => state.myResources.contacts,
+                    getter: (state) => state.PublishedProduct,
                     // how resource should be watched
                     watch: { delay: 500 },
                 },

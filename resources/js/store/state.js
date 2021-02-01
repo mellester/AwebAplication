@@ -1,7 +1,6 @@
-
 export default {
     PublishedProductApi: null,
-    PublishedProduct: null,
+    PublishedProduct: [],
     sendingRequest: false,
     myResources: {
         contacts: [
@@ -19,3 +18,4 @@ export default {
         ],
     },
 }
+
