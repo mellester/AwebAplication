@@ -1,6 +1,9 @@
 export default {
-    PublishedProductApi: null,
-    PublishedProduct: [],
+    PublishedProduct: {
+        Api: null,
+        data: [],
+        pagesRetrieved: new Set(),
+    },
     sendingRequest: false,
     myResources: {
         contacts: [

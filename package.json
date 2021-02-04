@@ -1,5 +1,8 @@
 {
     "private": true,
+    "resolutions": {
+        "axios": "^0.21.1"
+    },
     "scripts": {
         "dev": "npm run development",
         "development": "cross-env NODE_ENV=development node_modules/webpack/bin/webpack.js --progress --config=node_modules/laravel-mix/setup/webpack.config.js",
@@ -7,36 +10,45 @@
         "watch-poll": "npm run watch -- --watch-poll",
         "hot": "cross-env NODE_ENV=development node_modules/webpack-dev-server/bin/webpack-dev-server.js --inline --hot --disable-host-check --config=node_modules/laravel-mix/setup/webpack.config.js",
         "prod": "npm run production",
-        "production": "cross-env NODE_ENV=production node_modules/webpack/bin/webpack.js --no-progress --config=node_modules/laravel-mix/setup/webpack.config.js"
+        "production": "cross-env NODE_ENV=production node_modules/webpack/bin/webpack.js --no-progress --config=node_modules/laravel-mix/setup/webpack.config.js",
+        "preinstall": "npx npm-force-resolutions"
     },
     "devDependencies": {
-        "@inertiajs/inertia": "^0.3.2",
-        "@inertiajs/inertia-vue": "^0.2.4",
+        "@inertiajs/inertia": "^0.8.4",
+        "@inertiajs/inertia-vue": "^0.5.5",
         "@tailwindcss/ui": "^0.6.0",
         "axios": "^0.21.1",
-        "browser-sync": "^2.26.13",
-        "browser-sync-webpack-plugin": "^2.0.1",
+        "browser-sync": "^2.26.14",
+        "browser-sync-webpack-plugin": "^2.3.0",
         "cross-env": "^7.0",
-        "laravel-jetstream": "^0.0.3",
+        "laravel-echo": "^1.10.0",
+        "laravel-jetstream": "^1.2.0",
         "laravel-mix": "^5.0.1",
         "lodash": "^4.17.19",
         "moment": "^2.26.0",
+        "null-loader": "^4.0.1",
         "portal-vue": "^2.1.7",
         "postcss-import": "^12.0.1",
         "postcss-loader": "^3.0.0",
+        "pusher-js": "^7.0.3",
         "resolve-url-loader": "^3.1.0",
         "tailwindcss": "^1.8.0",
         "vue": "^2.6.12",
         "vue-template-compiler": "^2.6.10",
-        "webpack": "4.x"
+        "webpack": "^4.46.0"
     },
     "dependencies": {
         "@babel/polyfill": "^7.12.1",
+        "@inertiajs/inertia-vue3": "^0.3.5",
         "babel-runtime": "^6.26.0",
         "http-proxy-middleware": "^1.0.6",
         "rxjs": "^6.6.3",
+        "vue-ads-pagination": "^2.1.7",
+        "vue-awesome": "^4.1.0",
+        "vue-beautiful-chat": "^2.5.0",
+        "vue-google-maps-zipcode-input": "^1.0.6",
         "vue-rx": "^6.2.0",
-        "vuex": "^3.6.0",
+        "vuex": "^3.6.2",
         "vuex-search": "^2.2.5"
     }
 }

@@ -1,7 +1,10 @@
 <template>
   <ProductLayout>
     <h1>You are about to publish a product for sale on our webiste.</h1>
-    <product-list :productlist="[this.$page.product]" dusk="vue-product" />
+    <product-list
+      :productlist="[this.$page.props.product]"
+      dusk="vue-product"
+    />
     <div class="container grid">
       <h3>Options</h3>
 
@@ -98,7 +101,7 @@
       </form>
     </div>
     <div class="Previeuw">Previeuw</div>
-    <product-offer :product="this.$page.product" :options="options" />
+    <product-offer :product="this.$page.props.product" :options="options" />
   </ProductLayout>
 </template>
 
@@ -148,7 +151,7 @@ export default {
   },
   computed: {
     product: function () {
-      return this.$page.product;
+      return this.$page.props.product;
     },
   },
   Inputprops: {

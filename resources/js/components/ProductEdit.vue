@@ -168,7 +168,7 @@ export default {
           if (!this.hasErrors("default")) {
             this.$inertia.reload({ only: ["products"] });
           } else {
-            console.log(this.$page.errorBags["default"]);
+            console.log(this.$page.props.errorBags["default"]);
           }
         });
     },

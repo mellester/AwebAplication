@@ -104,17 +104,17 @@
             <div class="flex-shrink-0">
               <img
                 class="h-10 w-10 rounded-full"
-                :src="$page.user.profile_photo_url"
-                :alt="$page.user.name"
+                :src="$page.props.user.profile_photo_url"
+                :alt="$page.props.user.name"
               />
             </div>
 
             <div class="ml-3">
               <div class="font-medium text-base text-gray-800">
-                {{ $page.user.name }}
+                {{ $page.props.user.name }}
               </div>
               <div class="font-medium text-sm text-gray-500">
-                {{ $page.user.email }}
+                {{ $page.props.user.email }}
               </div>
             </div>
           </div>
@@ -130,7 +130,7 @@
             <jet-responsive-nav-link
               :href="route('api-tokens.index', [], false)"
               :active="route().current('api-tokens.index', [], false)"
-              v-if="$page.jetstream.hasApiFeatures"
+              v-if="$page.props.jetstream.hasApiFeatures"
             >
               API Tokens
             </jet-responsive-nav-link>
@@ -143,7 +143,7 @@
             </form>
 
             <!-- Team Management -->
-            <template v-if="$page.jetstream.hasTeamFeatures">
+            <template v-if="$page.props.jetstream.hasTeamFeatures">
               <div class="border-t border-gray-200"></div>
 
               <div class="block px-4 py-2 text-xs text-gray-400">
@@ -152,7 +152,7 @@
 
               <!-- Team Settings -->
               <jet-responsive-nav-link
-                :href="route('teams.show', $page.user.current_team, false)"
+                :href="route('teams.show', $page.props.user.current_team, false)"
                 :active="route().current('teams.show')"
               >
                 Team Settings
@@ -172,12 +172,12 @@
                 Switch Teams
               </div>
 
-              <template v-for="team in $page.user.all_teams">
+              <template v-for="team in $page.props.user.all_teams">
                 <form @submit.prevent="switchToTeam(team)" :key="team.id">
                   <jet-responsive-nav-link as="button">
                     <div class="flex items-center">
                       <svg
-                        v-if="team.id == $page.user.current_team_id"
+                        v-if="team.id == $page.props.user.current_team_id"
                         class="mr-2 h-5 w-5 text-green-400"
                         fill="none"
                         stroke-linecap="round"
@@ -266,7 +266,7 @@ export default {
   },
   methods: {
     closeModal(bag = "default") {
-      Vue.delete(this.$page.errorBags[bag], bag);
+      Vue.delete(this.$page.props.errorBags[bag], bag);
       this.showingErrorModal = false;
     },
     switchToTeam(team) {
@@ -289,7 +289,7 @@ export default {
   },
   computed: {
     errorbag: function () {
-      return this.$page.errorBags.default;
+      return this.$page.props.errorBags.default;
     },
   },
 };

@@ -2,6 +2,7 @@
 
 use App\Enums\productStatus;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\UserController;
 use App\Http\Controllers\UserOfferController;
 use App\Http\Middleware\AllowProxy;
 use Illuminate\Support\Facades\Route;
@@ -33,7 +34,21 @@ Route::get('/', function () {
     return Inertia\Inertia::render('Index', compact('PublishedProductApi'));
 })->name('landinpage');
 
+Route::get('/chat', function () {
+    Inertia\Inertia::setRootView('app');
+    return Inertia\Inertia::render('chat');
+})->name('chat');
+
+
+Route::get('/Paginate', function () {
+    $PublishedProductApi = Route::dispatch(Request::create('api/v1/PublishedProduct'))->getData();
+    Inertia\Inertia::setRootView('app');
+    return Inertia\Inertia::render('Paginate', compact('PublishedProductApi'));
+})->name('paginate');
+
+
 Route::middleware(['auth:sanctum', 'verified', AllowProxy::class])->group(function () {
+    Route::resource('user', UserController::class);
     Route::get('/dashboard', function (Request $request) {
         $request->user = Auth::user();
         $productinfoApi = Route::dispatch(Request::create('/api/v1/DashboardProduct'))->getData();

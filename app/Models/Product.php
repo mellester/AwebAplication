@@ -18,7 +18,7 @@ class Product extends Model
 		'status', 'name', 'description', 'price', 'photo',
 	];
 
-	protected $with = 'owner:id,name';
+	protected $with = 'owner:id,name,location';
 
 
 	/**

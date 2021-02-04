@@ -21,11 +21,13 @@
 <script>
 import AppLayout from "@/Layouts/AppLayout";
 import Welcome from "@/Jetstream/Welcome";
+import JetSectionBorder from "@/Jetstream/SectionBorder";
 
 export default {
   components: {
     AppLayout,
     Welcome,
+    JetSectionBorder,
   },
   props: {
     productinfoApi: {

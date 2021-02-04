@@ -20,7 +20,7 @@ export default {
   },
   data() {
     return {
-      layout: this.$page.user ? ProductLayout : BasicLayout,
+      layout: this.$page.props.user ? ProductLayout : BasicLayout,
     };
   },
   props: {

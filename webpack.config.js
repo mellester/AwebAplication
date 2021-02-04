@@ -16,6 +16,7 @@ module.exports = {
           },
         ]
       },
+      { test: /\.php$/, use: 'null-loader' }, //empty load php files
       {
         test: /\.m?js$/,
         exclude: /(node_modules|bower_components)/,

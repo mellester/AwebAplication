@@ -19,6 +19,7 @@ class PublishedProduct extends InternalApiResource
     {
         return Product::where('status', productStatus::Published)
             ->where('offer_at', '<', Carbon::now('UTC'))
+            // ->with('owner:location')
             ->Where(function ($query) {
                 $query->where('offer_until', '<', Carbon::now('UTC'))
                     ->orWhere('offer_until', null);

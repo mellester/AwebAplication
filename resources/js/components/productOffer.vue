@@ -1,6 +1,12 @@
 <template>
   <div class="container border body">
-    <img class="picture m-4" src="https://picsum.photos/400" sizes="400" />
+    <div class="absolute top-o left-o bg-gray-500" v-html="distance" />
+    <img
+      class="picture m-4"
+      :src="'https://picsum.photos/400?random=' + product.id"
+      sizes="400"
+    />
+    <!-- place holder picsum photos -->
     <div class="name mt-5 text-center text-lg">
       <span v-html="replace(product.name)" />
 
@@ -65,7 +71,7 @@ import JetResponsiveNavLink from "@/Jetstream/ResponsiveNavLink";
 import * as Status from "/resources/js/enums/productStatus.js";
 import * as Duration from "/resources/js/enums/Duration.js";
 import ErrorBagInteracter from "/resources/js/Mixins/InteractsWithErrorBags.js";
-
+import { haversine_distance_in_km as haversine_distance } from "/resources/js/libary.js";
 import Button from "../Jetstream/Button.vue";
 
 export default {
@@ -99,8 +105,27 @@ export default {
         return text;
       }
     },
+    distancedCalc(a, b) {
+      return haversine_distance(a,b);
+    },
   },
   computed: {
+    distance() {
+      if (this.$page.props.user == null) return "Please log in";
+      const userLocation = this.$page.props.user.location;
+      if (userLocation == null) return "Go to your profile to set a location ";
+      const ownerLocation = this.product.owner.location;
+      if (ownerLocation == null) return "This owner has no loaction set";
+
+      return (
+        "Distance " + this.distanceNum.toFixed(2) + ' km'
+      );
+    },
+  distanceNum(){
+      const ownerLocation = this.product.owner.location;
+      const userLocation = this.$page.props.user.location;
+    return haversine_distance(userLocation, ownerLocation)
+  },
     optionsC() {
       return this.options ? this.options : JSON.parse(this.product.offer) ?? [];
     },

@@ -29,8 +29,9 @@ class ProductPublished
      *
      * @return \Illuminate\Broadcasting\Channel|array
      */
+
     public function broadcastOn()
     {
-        return new PrivateChannel('channel-name');
+        return new Channel('messages');
     }
 }

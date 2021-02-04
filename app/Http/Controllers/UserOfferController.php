@@ -61,7 +61,7 @@ class UserOfferController extends Controller
                 ['user_id' => Auth::user()->id]
             )
         );
-        ProductOfferUpdated::dispatch($product->id, $ret->id);
+        ProductOfferUpdated::dispatch($ret);
         return Redirect()->back()->with('success', 'Successfully created a new offer for this product');
     }
 

@@ -7,12 +7,18 @@ import Vuex from 'vuex'
 import searchPlugin from 'vuex-search';
 import state from './store/state';
 import actions from './store/actions';
+import mutations from './store/mutations';
 
 import { InertiaApp } from '@inertiajs/inertia-vue';
 import { InertiaForm } from 'laravel-jetstream';
+
+//import { plugin } from '@inertiajs/inertia-vue'
+//Vue.use(plugin);
+
 import PortalVue from 'portal-vue';
 import VueRx from 'vue-rx'
-
+import Chat from 'vue-beautiful-chat'
+Vue.use(Chat)
 Vue.use(VueRx);
 
 Vue.mixin({ methods: { route } });
@@ -27,40 +33,13 @@ for (const key of req.keys()) {
     Vue.component(name, req(key).default);
 }
 
+
+
 //const app = document.getElementById('app');
 
 const store = new Vuex.Store({
     state,
-    mutations: {
-        sendingRequest(state, boolean) {
-            state.sendingRequest = boolean;
-        },
-        /**
-         * 
-         * @param {String} key The key in the store to set 
-         * @param {Object} payload 
-         * @param {string} payload.key - The key in the store 
-         * @param {Object} payload.data - The Paginate Info
-         */
-        setInitState(state, payload) {
-            // debugger;
-            const key = payload.key;
-            if (state[key] == null) {
-                state[key] = payload.data.data;
-            }
-            else {
-                payload.data.data.forEach(element => {
-                    let index = state[key].findIndex((value => value.id == element.id))
-                    if (index == -1)
-                        state[key].push(element);
-                    else {
-                        state[key][index] = (element);
-                    }
-                });
-            }
-            state[key + 'Api'] = payload.data;
-        },
-    },
+    mutations,
     actions,
     plugins: [
         searchPlugin({
@@ -69,7 +48,7 @@ const store = new Vuex.Store({
                     // what fields to index
                     index: ['name', 'data', 'description'],
                     // access the state to be watched by Vuex Search
-                    getter: (state) => state.PublishedProduct,
+                    getter: (state) => state.PublishedProduct.data,
                     // how resource should be watched
                     watch: { delay: 500 },
                 },

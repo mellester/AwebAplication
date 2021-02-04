@@ -1,7 +1,14 @@
 
 <template>
   <div>
-    <input type="text" ref="input" v-model="text" @input="doSearch" />
+    SearchBar
+    <input
+      type="text"
+      ref="input"
+      v-model="text"
+      @input="doSearch"
+      class="searchBar"
+    />
     <!-- <ul v-if="text.length > 0 && isLoading == false && this.firstTry">
       <li v-for="(id, key) in resultIds" v-bind:key="key">
         <span v-html="replace(PublishedProduct.find((o) => o.id == id).name)" />
@@ -30,17 +37,13 @@ export default {
       loading: false,
     };
   },
-  props: {
-    searchText: {
-      type: String,
-    },
-  },
+
   computed: {
     PublishedProduct() {
-      return this.$store.state.PublishedProduct;
+      return this.$store.state.PublishedProduct.data;
     },
     foundProducts() {
-      return this.$store.state.PublishedProduct.filter((o) => {
+      return this.$store.state.PublishedProduct.data.filter((o) => {
         return this.resultIds.includes(o.id);
       });
     },
@@ -71,7 +74,7 @@ export default {
       if (this.loading) return;
       this.loading = true;
       return this.$store
-        .dispatch("loadAll", "PublishedProductApi")
+        .dispatch("loadAll", "PublishedProduct")
         .then(() => {
           this.firstTry = true;
           this.$emit("searching", this.text);
@@ -86,5 +89,8 @@ export default {
 <style>
 .highlightText {
   color: red;
+}
+.searchBar {
+  background: grey;
 }
 </style>

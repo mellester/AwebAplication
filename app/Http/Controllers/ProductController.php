@@ -25,10 +25,11 @@ class ProductController extends Controller
      */
     public function index()
     {
-        $productlist = Product::where('status', '!=', 'notPublished')->with('owner:id,name')->orderBy('created_at')->paginate(50);
+        $productlist = Product::where('status', '!=', 'notPublished')->with('owner:id,name,location')->orderBy('created_at')->paginate(50);
+
         return Inertia::render(
             'products/index',
-            compact('productlist')
+            compact('productlist', 'users')
         );
     }
 

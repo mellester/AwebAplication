@@ -1,7 +1,10 @@
 <template>
   <ProductLayout>
     <h1>You are about to offer a price for the follwin product.</h1>
-    <product-list :productlist="[this.$page.product]" dusk="vue-product" />
+    <product-list
+      :productlist="[this.$page.props.product]"
+      dusk="vue-product"
+    />
     <div class="container grid">
       <h3>About</h3>
       <ul>
@@ -81,6 +84,12 @@ export default {
       return JSON.parse(this.product.offer);
     },
     highestOffer() {
+      if (
+        this.product.user_offers == null ||
+        this.product.user_offers.length == 0
+      ) {
+        return [];
+      }
       return this.product.user_offers.reduce((lhs, rhs) =>
         lhs.price > rhs.price ? lhs : rhs
       );

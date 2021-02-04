@@ -32,8 +32,10 @@ class ProductOfferUpdated implements ShouldBroadcast
      *
      * @return \Illuminate\Broadcasting\Channel|array
      */
+
+
     public function broadcastOn()
     {
-        return new PrivateChannel('server-events');
+        return new Channel('messages');
     }
 }

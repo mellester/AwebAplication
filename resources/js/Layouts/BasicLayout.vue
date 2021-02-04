@@ -1,10 +1,20 @@
 <template>
   <div class="site">
     <header class="topbar header">
-      <a href="/" :active="true">
-        <span class="sr-only">home page</span>
-        {{ $inertia.page.props.appName }}
-      </a>
+      <nav>
+        <a href="/" :active="true">
+          <span class="sr-only">home page</span>
+          {{ $inertia.page.props.appName }}
+        </a>
+        <a href="/Paginate" :active="true">
+          <span class="sr-only">Paginate</span>
+          Paginate
+        </a>
+        <a href="/chat" :active="true">
+          <span class="sr-only">Paginate</span>
+          chat
+        </a>
+      </nav>
       <button
         @click="isOpen = !isOpen"
         id="menuBttn"
@@ -27,6 +37,7 @@
         class="nav flex items-begin justify-end"
       >
         <a
+          v-if="$page.props.user == null"
           class="nav route"
           :href="route('register', [], false)"
           :active="route().current('register')"
@@ -34,12 +45,22 @@
           Register
         </a>
         <a
+          v-if="$page.props.user == null"
           as="button"
           class="nav route"
           :href="route('login', [], false)"
           :active="route().current('login')"
         >
           Sign in
+        </a>
+        <a
+          v-else
+          as="button"
+          class="nav route"
+          :href="route('dashboard', [], false)"
+          :active="route().current('login')"
+        >
+          dashboard
         </a>
       </nav>
       <slot name="header"></slot>
