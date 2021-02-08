@@ -1,7 +1,13 @@
 <template>
   <BasicLayout>
     Chat
-    <Button>Sever </Button>
+    <div v-for="option in options" v-bind:key="option">
+      <input type="radio" :id="option" :value="option" v-model="picked" />
+      <label :for="option">{{ option }}</label>
+      <br />
+    </div>
+
+    <span>Picked: {{ picked }}</span>
     <chatWindowd :isOpen="false"></chatWindowd>
   </BasicLayout>
 </template>
@@ -21,12 +27,14 @@ export default {
   components: { BasicLayout, chatWindowd, Button },
   data() {
     return {
+      picked: null,
       isOpen: false,
       error: null,
       loading: false,
       promise: false,
       search: undefined,
       PublishedProduct: undefined,
+      options: ["Server", "two"],
     };
   },
   computed: {
