@@ -1,10 +1,7 @@
-export function haversine_distance_in_km(j1, j2) {
-    var R = 6371; // Radius of the Earth in km
+export function haversine_distance(j1, j2) {
+    var R = 6378; // Radius of the Earth in km
     const mk1 = JSON.parse(j1).latlng;
     const mk2 = JSON.parse(j2).latlng;
-    if (mk1.lat == null)
-        debugger;
-
     var rlat1 = mk1.lat * (Math.PI / 180); // Convert degrees to radians
     var rlat2 = mk2.lat * (Math.PI / 180); // Convert degrees to radians
     var difflat = rlat2 - rlat1; // Radian difference (latitudes)

@@ -2,20 +2,28 @@
   <BasicLayout>
     <search-bar v-on:searching="searchUpdate" class="bg-gray-100" />
     <div ref="productsOffers">
-    <productOffer
-      ref="productsOffer"
-      v-for="(product, key) in products"
-      :key="key"
-      :product="product"
-      :search="search"
-      class="m-2"
-    />
+      <input
+        v-model="sortByDistance"
+        id="sortBy"
+        type="checkbox"
+        class="mr-2"
+      />
+      <label for="sortBy">Sort by distance</label>
+      <productOffer
+        ref="productsOffer"
+        v-for="(product, key) in products"
+        :key="key"
+        :product="product"
+        :search="search"
+        class="m-2"
+      />
     </div>
   </BasicLayout>
 </template>
 
 
 <script>
+import Input from "../Jetstream/Input.vue";
 import BasicLayout from "../Layouts/BasicLayout.vue";
 import productOffer from "/resources/js/components/productOffer.vue";
 import searchBar from "/resources/js/components/searchbar.vue";
@@ -27,16 +35,21 @@ export default {
       error: null,
       loading: false,
       promise: false,
+      sortByDistance: false,
       search: undefined,
       PublishedProduct: undefined,
     };
   },
-  components: { BasicLayout, productOffer, searchBar },
+  components: { BasicLayout, productOffer, searchBar, Input },
   computed: {
     products() {
       // debugger;
-      if (this.PublishedProduct != undefined) {
-        return this.PublishedProduct;
+      if (this.sortByDistance) {
+        if (this.PublishedProduct)
+          return (
+            this.$store.getters.sortByDistance(this.PublishedProduct) ?? []
+          );
+        return this.$store.getters.sortByDistance("PublishedProduct") ?? [];
       }
       return this.$store.state.PublishedProduct.data ?? [];
     },
@@ -74,18 +87,28 @@ export default {
     },
   },
   mounted() {
+    const userLocation = this.$page?.props?.user?.location;
+    this.$store.commit("userLocation", userLocation);
     this.scroll();
-    this.$watch(
-        () => {
-          const i =  this.$refs.productsOffer;
-          debugger;
-            return this.$refs.productsOffers.childNodes.length
-        },
-      (val) => {
-        alert('App $watch $refs.counter.i: ' + val)
-      }
-    )
   },
 };
 </script>
 
+<style scoped>
+input[type="checkbox"] {
+  /* Double-sized Checkboxes */
+  -ms-transform: scale(2); /* IE */
+  -moz-transform: scale(2); /* FF */
+  -webkit-transform: scale(2); /* Safari and Chrome */
+  -o-transform: scale(2); /* Opera */
+  transform: scale(2);
+  padding: 10px;
+}
+
+/* Might want to wrap a span around your checkbox text */
+.checkboxtext {
+  /* Checkbox text */
+  font-size: 110%;
+  display: inline;
+}
+</style>

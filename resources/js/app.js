@@ -8,6 +8,7 @@ import searchPlugin from 'vuex-search';
 import state from './store/state';
 import actions from './store/actions';
 import mutations from './store/mutations';
+import getters from './store/getters';
 
 import { InertiaApp } from '@inertiajs/inertia-vue';
 import { InertiaForm } from 'laravel-jetstream';
@@ -41,6 +42,7 @@ const store = new Vuex.Store({
     state,
     mutations,
     actions,
+    getters,
     plugins: [
         searchPlugin({
             resources: {

@@ -71,7 +71,7 @@ import JetResponsiveNavLink from "@/Jetstream/ResponsiveNavLink";
 import * as Status from "/resources/js/enums/productStatus.js";
 import * as Duration from "/resources/js/enums/Duration.js";
 import ErrorBagInteracter from "/resources/js/Mixins/InteractsWithErrorBags.js";
-import { haversine_distance_in_km as haversine_distance } from "/resources/js/libary.js";
+import { haversine_distance } from "/resources/js/libary.js";
 import Button from "../Jetstream/Button.vue";
 
 export default {
@@ -106,7 +106,7 @@ export default {
       }
     },
     distancedCalc(a, b) {
-      return haversine_distance(a,b);
+      return haversine_distance(a, b).toFixed(2);
     },
   },
   computed: {
@@ -117,15 +117,9 @@ export default {
       const ownerLocation = this.product.owner.location;
       if (ownerLocation == null) return "This owner has no loaction set";
 
-      return (
-        "Distance " + this.distanceNum.toFixed(2) + ' km'
-      );
+      return "" + this.distancedCalc(userLocation, ownerLocation) + " km";
     },
-  distanceNum(){
-      const ownerLocation = this.product.owner.location;
-      const userLocation = this.$page.props.user.location;
-    return haversine_distance(userLocation, ownerLocation)
-  },
+
     optionsC() {
       return this.options ? this.options : JSON.parse(this.product.offer) ?? [];
     },
