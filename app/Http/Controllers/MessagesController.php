@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Messages;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class MessagesController extends Controller
 {
@@ -12,9 +13,13 @@ class MessagesController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $this->middleware('auth');
+        Auth::check();
+        $user = Auth::user();
+        $limit = $request->input('limit', 10);
+        // return Messages::where('user_id', $user->id)->paginate($limit);
+        return Messages::paginate($limit);
     }
 
     /**

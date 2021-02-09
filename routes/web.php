@@ -1,12 +1,14 @@
 <?php
 
 use App\Enums\productStatus;
+use App\Http\Controllers\MessagesController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\UserOfferController;
 use App\Http\Middleware\AllowProxy;
 use Illuminate\Support\Facades\Route;
 use App\Http\Resources\DashboardProduct;
+use App\Models\Messages;
 use App\Models\Product;
 use App\Models\User;
 use Carbon\Carbon;
@@ -48,6 +50,7 @@ Route::get('/Paginate', function () {
 
 
 Route::middleware(['auth:sanctum', 'verified', AllowProxy::class])->group(function () {
+    Route::resource('message', MessagesController::class);
     Route::resource('user', UserController::class);
     Route::get('/dashboard', function (Request $request) {
         $request->user = Auth::user();

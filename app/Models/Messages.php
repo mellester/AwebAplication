@@ -13,14 +13,17 @@ class Messages extends Model
     {
         return function (Blueprint $table) {
             $table->id();
-            $table->bigInteger('user_id')->unsigned();
-            $table->foreign('user_id')->references('id')->on('users')
+            $table->bigInteger('from_user_id')->unsigned()->nullable();
+            $table->bigInteger('to_user_id')->unsigned();
+            $table->foreign('to_user_id')->references('id')->on('users')
                 ->onDelete('cascade');
-            $table->text('message');
+            $table->json('message');
             $table->timestamps();
         };
     }
-
+    protected $fillable = [
+        'from_user_id', 'to_user_id', 'message'
+    ];
 
     /**
      * A message belong to a user

@@ -22,6 +22,10 @@ export default {
         state.userLocation = payload;
 
     },
+    SET_CHANNEL_LISTENING(state, payload) {
+        state.channel_listening = payload;
+
+    },
     /**
      * 
      * @param {String} key The key in the store to set 

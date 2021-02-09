@@ -28,6 +28,17 @@ class ProductOfferUpdated implements ShouldBroadcast
     }
 
     /**
+ * The event's broadcast name.
+ *
+ * @return string
+ */
+public function broadcastAs()
+{
+    return 'message';
+}
+
+
+    /**
      * Get the channels the event should broadcast on.
      *
      * @return \Illuminate\Broadcasting\Channel|array

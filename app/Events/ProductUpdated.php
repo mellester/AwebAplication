@@ -35,4 +35,14 @@ class ProductUpdated
     {
         return new Channel('messages');
     }
+
+        /**
+ * The event's broadcast name.
+ *
+ * @return string
+ */
+public function broadcastAs()
+{
+    return 'message';
+}
 }

@@ -7,6 +7,7 @@ import Vuex from 'vuex'
 import searchPlugin from 'vuex-search';
 import state from './store/state';
 import actions from './store/actions';
+import { UserStoreActions } from './store/action-types';
 import mutations from './store/mutations';
 import getters from './store/getters';
 
@@ -22,6 +23,7 @@ import Chat from 'vue-beautiful-chat'
 Vue.use(Chat)
 Vue.use(VueRx);
 
+
 Vue.mixin({ methods: { route } });
 Vue.use(InertiaApp);
 Vue.use(InertiaForm);
@@ -35,10 +37,13 @@ for (const key of req.keys()) {
 }
 
 
-
+import messages, { MESSAGES_MODULE } from './store/messages'
 //const app = document.getElementById('app');
 
 const store = new Vuex.Store({
+    modules: {
+        [MESSAGES_MODULE]: messages,
+    },
     state,
     mutations,
     actions,
@@ -70,4 +75,8 @@ new Vue({
                 resolveComponent: (name) => require(`./Pages/${name}`).default,
             },
         }),
+    created: function () {
+        console.log(UserStoreActions.INIT_CHANNEL_LISTENERS);
+        this.$store.dispatch(UserStoreActions.INIT_CHANNEL_LISTENERS);
+    }
 }).$mount('#app');

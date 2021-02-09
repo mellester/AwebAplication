@@ -5,8 +5,8 @@
     :onMessageWasSent="onMessageWasSent"
     :messageList="chat.messageList"
     :newMessagesCount="chat.newMessagesCount"
-    :isOpen="isChatOpen"
     :close="closeChat"
+    :isOpen="chat.chatOpen"
     :icons="chat.icons"
     :open="openChat"
     :showEmoji="true"
@@ -30,6 +30,11 @@ import OpenIcon from "/resources/assets/logo-no-bg.svg";
 import FileIcon from "/resources/assets/file.svg";
 import CloseIconSvg from "/resources/assets/close.svg";
 export default {
+  props: {
+    isChatOpen : {
+      default: false
+    },
+  },
   data() {
     return {
       chat: {
@@ -65,8 +70,8 @@ export default {
           { type: "text", author: `me`, data: { text: `Say yes!` } },
           { type: "text", author: `user1`, data: { text: `No.` } },
         ],
+        chatOpen: true,
         newMessagesCount: 1,
-        isChatOpen: true,
         closeChat: false,
         showTypingIndicator: "",
         colors: {
@@ -117,12 +122,12 @@ export default {
     },
     openChat() {
       // called when the user clicks on the fab button to open the chat
-      this.isChatOpen = true;
+      this.chat.chatOpen = true;
       this.newMessagesCount = 0;
     },
     closeChat() {
       // called when the user clicks on the botton to close the chat
-      this.isChatOpen = false;
+      this.chat.chatOpen = false;
     },
     handleScrollToTop() {
       // called when the user scrolls message list to top
