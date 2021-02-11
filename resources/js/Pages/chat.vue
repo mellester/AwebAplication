@@ -1,14 +1,18 @@
 <template>
   <BasicLayout>
     Chat
-    <div v-for="option in options" v-bind:key="option">
-      <input type="radio" :id="option" :value="option" v-model="picked" />
-      <label :for="option">{{ option }}</label>
+    <div v-for="user in users" v-bind:key="user.id">
+      <input type="radio" :id="user.id" :value="user.id" v-model="picked" />
+      <label :for="user.id">{{ user.name }}</label>
       <br />
     </div>
 
     <span>Picked: {{ picked }}</span>
-    <chatWindowd :isOpen="false"></chatWindowd>
+    <chatWindowd
+      :users="userData"
+      :messages="messagesPicked"
+      :isOpen="false"
+    ></chatWindowd>
   </BasicLayout>
 </template>
 
@@ -26,7 +30,7 @@ import chatWindowd from "/resources/js/components/chatWindowd.vue";
 import BasicLayout from "../Layouts/BasicLayout.vue";
 import Paginate from "/resources/js/components/Paginate.vue";
 import Button from "@/Jetstream/Button.vue";
-import { MESSAGES, PAGINATION } from "../store/messages/state";
+import { MESSAGES, PAGINATION, USERS } from "../store/messages/state";
 
 export default {
   components: { BasicLayout, chatWindowd, Button },
@@ -47,34 +51,42 @@ export default {
     ...mapState(MESSAGES_MODULE, {
       messages: MESSAGES,
       pagination: PAGINATION,
+      users: USERS,
     }),
+    messagesPicked() {
+      return this.messages.filter((message) => {
+        return message.from_user_id == this.picked;
+      });
+    },
+    userData() {
+      return this.users.map((user) => {
+        return {
+          id: user.id ?? 1,
+          name: user["name"] ?? "Unkown",
+          imageUrl: user["profile_photo_url"] ?? "",
+        };
+      });
+    },
   },
-  created() {
-    this.fetchEmployees({ page: 1, limit: 20 });
-  },
+  created() {},
   methods: {
     ...mapActions(MESSAGES_MODULE, {
-      fetchEmployees: FETCH_MESSAGES,
+      fetchMessages: FETCH_MESSAGES,
     }),
+    refres_messages() {
+      let promise = this.fetchMessages({ page: 1, limit: 20 });
+      this.loading = true;
+      promise
+        .then(() => {
+          console.log("Test");
+        })
+        .finally(() => {
+          this.loading = false;
+        });
+    },
   },
   mounted() {
-    const req = require.context(
-      "../../../app/Events",
-      false,
-      /\.(php)$/i,
-      "weak"
-    );
-
-    const channel = Echo.channel("messages");
-    const eventsTolisten = req.keys().map((item) => item.slice(2, -4));
-    eventsTolisten.push(".message");
-    eventsTolisten.push(".newMessage");
-    console.log(eventsTolisten);
-    eventsTolisten.forEach((event) => {
-      channel.listen(event, (e) => {
-        console.log("window", event, e);
-      });
-    });
+    this.refres_messages();
   },
 };
 </script>

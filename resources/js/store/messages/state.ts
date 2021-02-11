@@ -1,4 +1,5 @@
 export const MESSAGES = 'data'
+export const USERS = 'users'
 export const PAGINATION = 'pagination'
 // import './defenitons';
 import { Paginate as PaginateInterface } from './definitions'
@@ -9,7 +10,8 @@ export class Pagination extends PaginateInterface {
 
 }
 
-export default {
-    [MESSAGES]: [],
-    [PAGINATION]: new Pagination(),
+export class State {
+    [MESSAGES]: any[] = [];
+    [PAGINATION]: Pagination = new Pagination();
+    [USERS]: any[] = [];
 }

@@ -37,7 +37,7 @@ class UserController extends Controller
      */
     public function show($id)
     {
-        //
+        dd(User::find($id));
     }
 
     /**

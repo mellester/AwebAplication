@@ -37,7 +37,7 @@ for (const key of req.keys()) {
 }
 
 
-import messages, { MESSAGES_MODULE } from './store/messages'
+import messages, { MESSAGES_MODULE } from './store/messages/index'
 //const app = document.getElementById('app');
 
 const store = new Vuex.Store({

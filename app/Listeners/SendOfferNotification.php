@@ -34,10 +34,11 @@ class SendOfferNotification
      */
     public function handle(ProductOfferUpdated $event)
     {
+
         $user_id = Product::find($event->offer->product_id)->user_id;
         Messages::create([
             'to_user_id' => $user_id,
-            'from_user_id' => $event->user_id,
+            'from_user_id' => $event->offer->user_id,
             'message' => json_encode([
                 get_class($event) => $event->offer,
             ]),

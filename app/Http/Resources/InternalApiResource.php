@@ -20,6 +20,9 @@ class InternalApiResource extends JsonResource
             'retrieved_on' => Carbon::now('UTC'),
             'data' => $this->itsData($request),
         ];
+        if ($this->model) {
+            $data['model'] = $this->model;
+        }
         return $data;
     }
 }

@@ -1,9 +1,9 @@
 <template>
   <beautiful-chat
-    :participants="chat.participants"
+    :participants="participants"
     :titleImageUrl="chat.titleImageUrl"
     :onMessageWasSent="onMessageWasSent"
-    :messageList="chat.messageList"
+    :messageList="messageList"
     :newMessagesCount="chat.newMessagesCount"
     :close="closeChat"
     :isOpen="chat.chatOpen"
@@ -31,8 +31,41 @@ import FileIcon from "/resources/assets/file.svg";
 import CloseIconSvg from "/resources/assets/close.svg";
 export default {
   props: {
-    isChatOpen : {
-      default: false
+    messages: {
+      type: Array,
+    },
+    users: {
+      type: Array,
+      required: true,
+    },
+    isChatOpen: {
+      default: false,
+    },
+  },
+  computed: {
+    participants() {
+      let userIds = [
+        ...new Set(this.messages.map((message) => message.from_user_id)),
+      ];
+
+      return userIds.map((id) => {
+        return {
+          id: id ?? 1,
+          name: this.users[id]?.["name"] ?? "Unkown",
+          imageUrl: this.users[id]?.["profile_photo_url"] ?? "",
+        };
+      });
+    },
+    messageList() {
+      return this.messages.map((ellement) => {
+        return {
+          type: "text",
+          author: ellement.from_user_id,
+          data: {
+            text: ellement.message,
+          },
+        };
+      });
     },
   },
   data() {
@@ -56,20 +89,8 @@ export default {
             name: "default",
           },
         },
-        participants: [
-          {
-            id: "user1",
-            name: "Matteo",
-            imageUrl:
-              "https://avatars3.githubusercontent.com/u/1915989?s=230&v=4",
-          },
-        ],
         titleImageUrl:
           "https://a.slack-edge.com/66f9/img/avatars-teams/ava_0001-34.png",
-        messageList: [
-          { type: "text", author: `me`, data: { text: `Say yes!` } },
-          { type: "text", author: `user1`, data: { text: `No.` } },
-        ],
         chatOpen: true,
         newMessagesCount: 1,
         closeChat: false,

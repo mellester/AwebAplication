@@ -1,4 +1,9 @@
 import { Paginate } from "../store/messages/definitions";
+import route from "../../../vendor/tightenco/ziggy/src/js/index";
+interface ZiggyObject {
+    route: Function,
+}
+declare var Ziggy: ZiggyObject;
 
 export default {
     async fetchMessages(pagination: Paginate) {
@@ -20,4 +25,18 @@ export default {
         endpoint.port = window.location.port;
         return (await instance.get(endpoint.href)).data
     },
+    async fetchUsers(ids: Number[]) {
+        let endpoint = new URL(window.location.href);
+        const z = Ziggy;
+        // @ts-ignore 
+        let idsString = JSON.stringify(ids);
+        endpoint.pathname = route('getResourceCollection', [], false);
+        endpoint.searchParams.set('resourceName', 'user');
+        endpoint.searchParams.set('resourceIds', idsString);
+        console.log(endpoint.href);
+        const instance = window.axios;
+
+        return (await instance.get(endpoint.href)).data
+
+    }
 }

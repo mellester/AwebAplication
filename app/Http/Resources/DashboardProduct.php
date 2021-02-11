@@ -41,14 +41,12 @@ class DashboardProduct extends InternalApiResource
     SQL;
     // public static $test4 = " Hello there %s." . "hi";
 
+
     // public static $test1 = sprintf(" Hello there %s.", "hi");
     // public static $test2 = sprintf(" Hello there %s.", $notPublished);
     // public static $test3 = sprintf(" Hello there %s.", productStatus::notPublished);
 
-    public function __construct($a)
-    {
-        parent::__construct($a);
-    }
+
     /**
      * Transform the resource into an array.
      *

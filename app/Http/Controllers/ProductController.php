@@ -29,7 +29,7 @@ class ProductController extends Controller
 
         return Inertia::render(
             'products/index',
-            compact('productlist', 'users')
+            compact('productlist')
         );
     }
 
