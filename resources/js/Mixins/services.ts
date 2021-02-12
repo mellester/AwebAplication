@@ -1,9 +1,7 @@
 import { Paginate } from "../store/messages/definitions";
 import route from "../../../vendor/tightenco/ziggy/src/js/index";
-interface ZiggyObject {
-    route: Function,
-}
-declare var Ziggy: ZiggyObject;
+
+
 
 export default {
     async fetchMessages(pagination: Paginate) {
@@ -27,7 +25,6 @@ export default {
     },
     async fetchUsers(ids: Number[]) {
         let endpoint = new URL(window.location.href);
-        const z = Ziggy;
         // @ts-ignore 
         let idsString = JSON.stringify(ids);
         endpoint.pathname = route('getResourceCollection', [], false);
@@ -38,5 +35,17 @@ export default {
 
         return (await instance.get(endpoint.href)).data
 
+    },
+
+    async sendMessage(message: any) {
+        let endpoint = new URL(window.location.href);
+        const toSend = JSON.stringify(message);
+        endpoint.pathname = route('sendMessage', [], false);
+        const data = { 'message': message };
+        console.log(endpoint.href);
+        const instance = window.axios;
+        return (await instance.post(endpoint.href, data)).data
+
     }
+
 }

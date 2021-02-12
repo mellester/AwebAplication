@@ -11,6 +11,7 @@
     <chatWindowd
       :users="userData"
       :messages="messagesPicked"
+      :userPicked="picked"
       :isOpen="false"
     ></chatWindowd>
   </BasicLayout>

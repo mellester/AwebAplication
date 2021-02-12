@@ -7,8 +7,12 @@ import {
 import { State } from './state'
 
 export const FETCH_MESSAGES = 'fetch_messages'
+export const SEND_MESSAGE = 'send_message';
 
 export default {
+    async [SEND_MESSAGE](context, message) {
+        await api.sendMessage(message);
+    },
     /**
      * 
      * @param param0 
@@ -30,7 +34,7 @@ export default {
         console.log(context, 'context');
         let userIds = [
             ...new Set(context.state.data.map((message) => message.from_user_id)),
-        ];
+        ] as Number[];
         const dataUsers = await api.fetchUsers(
             userIds
         );

@@ -29,6 +29,9 @@ import CloseIcon from "/resources/assets/close-icon.png";
 import OpenIcon from "/resources/assets/logo-no-bg.svg";
 import FileIcon from "/resources/assets/file.svg";
 import CloseIconSvg from "/resources/assets/close.svg";
+import { MESSAGES_MODULE, SEND_MESSAGE } from "@/store/messages";
+import { mapActions, mapState } from "vuex";
+
 export default {
   props: {
     messages: {
@@ -41,13 +44,13 @@ export default {
     isChatOpen: {
       default: false,
     },
+    userPicked: {},
   },
   computed: {
     participants() {
       let userIds = [
         ...new Set(this.messages.map((message) => message.from_user_id)),
       ];
-
       return userIds.map((id) => {
         return {
           id: id ?? 1,
@@ -125,6 +128,9 @@ export default {
     };
   },
   methods: {
+    ...mapActions(MESSAGES_MODULE, {
+      vuexSendMessage: SEND_MESSAGE,
+    }),
     sendMessage(text) {
       if (text.length > 0) {
         this.newMessagesCount = this.isChatOpen
@@ -139,7 +145,9 @@ export default {
     },
     onMessageWasSent(message) {
       // called when the user sends a message
-      this.messageList = [...this.messageList, message];
+      message["to_user_id"] = this.userPicked;
+      console.log(message);
+      this.vuexSendMessage(message);
     },
     openChat() {
       // called when the user clicks on the fab button to open the chat

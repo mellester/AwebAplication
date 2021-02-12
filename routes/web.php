@@ -50,7 +50,9 @@ Route::get('/Paginate', function () {
 
 
 Route::middleware(['auth:sanctum', 'verified', AllowProxy::class])->group(function () {
-    Route::resource('message', MessagesController::class);
+    Route::resource('message', MessagesController::class)->names([
+        'store' => 'sendMessage'
+    ]);
     Route::resource('user', UserController::class);
     Route::get('/dashboard', function (Request $request) {
         $request->user = Auth::user();

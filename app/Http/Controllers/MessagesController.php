@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Messages;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Response;
 
 class MessagesController extends Controller
 {
@@ -40,7 +41,19 @@ class MessagesController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        // dd($request['message']);
+        $message = $request['message'];
+        if ($message['to_user_id'] == null || $message['to_user_id'] == 0) {
+            return  response()->json([
+                'error' => $message
+            ], Response::HTTP_BAD_REQUEST);
+        }
+        unset($message['author']);
+        Messages::create([
+            'from_user_id' => Auth::user()->id,
+            'to_user_id' => $message['to_user_id'],
+            'message' => json_encode($message)
+        ]);
     }
 
     /**
